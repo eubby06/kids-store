@@ -13,7 +13,7 @@ class StoreFrontController extends Controller
         $products = Product::where('is_featured', true)->get();
         $categories = Category::all();
 
-        return inertia('frontend/pages/storefront', [
+        return inertia('Frontend/Pages/StoreFront', [
             'status' => session('status'),
             'products' => $products,
             'categories' => $categories,

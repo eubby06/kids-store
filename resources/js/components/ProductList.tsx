@@ -11,11 +11,13 @@ export default function ProductList({ products = [] }: ProductListProps) {
                     <div key={product.id} className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-slate-100 p-3 shadow-sm hover:shadow-md transition">
                         {/* Image Wrapper */}
                         <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-xl bg-slate-100 lg:aspect-none group-hover:opacity-90 transition h-56">
-                            <img
-                                src={product.image}
-                                alt={product.name}
-                                className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                            />
+                            <Link href={`/products/${product.id}`}>
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                />
+                            </Link>
                         </div>
 
                         {/* Info & Call Action */}
@@ -23,7 +25,7 @@ export default function ProductList({ products = [] }: ProductListProps) {
                             <div>
                                 <p className="text-xs text-slate-400 font-medium tracking-wide uppercase">{product.category}</p>
                                 <h3 className="mt-1 text-sm font-semibold text-slate-700">
-                                    <Link href="#">
+                                    <Link href={`/products/${product.id}`} className="relative z-10">
                                         <span aria-hidden="true" className="absolute inset-0" />
                                         {product.name}
                                     </Link>

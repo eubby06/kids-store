@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import ProductList from '@/components/ProductList';
 import { storefrontProps } from '@/types';
-import Wrapper from './wrapper';
+import Wrapper from './Wrapper';
 
 export default function Products({ products, filters }: storefrontProps) {
     return (

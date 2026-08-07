@@ -3,7 +3,7 @@ import { storefrontProps } from '@/types';
 import Header from '@/components/Header';
 import Categories from '@/components/Categories';
 import ProductList from '@/components/ProductList';
-import Wrapper from './wrapper';
+import Wrapper from './Wrapper';
 export default function Storefront({ status, products = [], categories = [], filters }: storefrontProps) {
     return (
         <Wrapper>

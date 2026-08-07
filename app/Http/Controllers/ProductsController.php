@@ -31,7 +31,7 @@ class ProductsController extends Controller
             $products = Product::all();
         }
         
-        return inertia('frontend/pages/products', [
+        return inertia('Frontend/Pages/Products', [
             'status' => session('status'),
             'products' => $products,
             'filters' => [
