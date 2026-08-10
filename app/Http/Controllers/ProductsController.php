@@ -8,7 +8,25 @@ use App\Models\Product;
 
 class ProductsController extends Controller
 {
-    public function products(Request $request): Response
+    public function getId($productId, Request $request): Response
+    {
+        $product = Product::with('variants')->find($productId);
+
+        if (!$product) {
+            return inertia('Frontend/Pages/ProductNotFound', [
+                'status' => 'Product not found',
+            ]);
+        }
+
+        return inertia('Frontend/Pages/ProductDetails', [
+            'status' => session('status'),
+            'product' => $product,
+            'variants' => $product->variants,
+            'images' => []
+        ]);
+    }
+
+    public function getAll(Request $request): Response
     {
         $searchQuery = $request->input('search');
         $isExclusive = $request->input('is_exclusive');

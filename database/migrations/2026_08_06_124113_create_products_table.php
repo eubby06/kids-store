@@ -15,17 +15,17 @@ return new class extends Migration
             $table->id(); // Primary Auto-Increment ID
             $table->string('name'); // Product Name
             $table->string('slug')->unique(); // URL Friendly version of Name (e.g. minimalist-backpack)
-            $table->string('category'); // Product Category (e.g. Travel, Audio)
-            
+            $table->foreignId('category_id')->constrained()->onDelete('cascade'); // Product Category (e.g. Travel, Audio)
+
             // Storing price safely using integer cents (e.g., $120.00 is stored as 12000)
             // This prevents common floating-point rounding bugs in financial math
             $table->unsignedInteger('price'); 
             
             $table->text('description')->nullable(); // Optional detailed product overview
-            $table->string('image')->nullable(); // URL track or storage filepath path for product photo
-            $table->unsignedInteger('stock')->default(0); // Warehouse quantity tracking
             $table->boolean('is_featured')->default(false); // Quick toggle for landing page exhibits
-            
+            $table->boolean('is_new_arrival')->default(false)->after('is_on_sale');
+            $table->boolean('is_exclusive')->default(false)->after('is_new_arrival');
+
             $table->timestamps(); // Created_at and updated_at timestamps
         });
     }

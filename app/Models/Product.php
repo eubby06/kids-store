@@ -15,11 +15,16 @@ class Product extends Model
     protected $fillable = [
         'name',
         'slug',
-        'category',
+        'category_id',
         'price',
         'description',
-        'image',
-        'stock',
         'is_featured',
+        'is_new_arrival',
+        'is_exclusive',
     ];
+
+    public function variants()
+    {
+        return $this->hasMany(Variant::class);
+    }
 }

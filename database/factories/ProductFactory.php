@@ -18,25 +18,21 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->words(3, true);
+        $words = [fake()->word(), fake()->word(), fake()->word()];
+        $name = ucwords($words[0] . ' ' . $words[1] . ' ' . $words[2]);
 
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'category' => $this->faker->randomElement(['Audio', 'Tech', 'Office', 'Travel']),
-            
+            'category_id' => fake()->numberBetween(1, 4),
+
             // Generates prices between $20.00 (2000 cents) and $350.00 (35000 cents)
-            'price' => $this->faker->numberBetween(2000, 35000), 
-            
-            'description' => $this->faker->paragraph(3),
-            
-            // Pulls realistic, clean images from Unsplash placeholder source
-            'image' => $this->faker->randomElement([
-                'https://picsum.photos/200/300'
-            ]),
-            
-            'stock' => $this->faker->numberBetween(5, 50),
-            'is_featured' => $this->faker->boolean(40), // 40% chance of being featured
+            'price' => fake()->numberBetween(2000, 35000),
+
+            'description' => fake()->text(120),
+            'is_featured' => fake()->boolean(40), // 40% chance of being featured
+            'is_new_arrival' => fake()->boolean(25),
+            'is_exclusive' => fake()->boolean(15),
         ];
     }
 }

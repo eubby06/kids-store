@@ -7,11 +7,11 @@ use App\Http\Controllers\StoreFrontController;
 // customer facing
 Route::inertia('/login', 'Frontend/Auth/Login')->name('login');
 Route::inertia('/register', 'Frontend/Auth/Register')->name('register');
-Route::inertia('/products/{id}', 'Frontend/Pages/ProductDetails')->name('product.details');
 Route::inertia('/cart', 'Frontend/Pages/Cart')->name('cart');
 
 Route::get('/', [StoreFrontController::class, 'index'])->name('home');
-Route::get('/products', [ProductsController::class, 'products'])->name('products');
+Route::get('/products', [ProductsController::class, 'getAll'])->name('products');
+Route::get('/products/{id}', [ProductsController::class, 'getId'])->name('products.show');
 
 // admin facing
 Route::inertia('/admin/login', 'Admin/Auth/Login')->name('admin.login');
