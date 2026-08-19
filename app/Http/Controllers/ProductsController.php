@@ -8,9 +8,11 @@ use App\Models\Product;
 
 class ProductsController extends Controller
 {
-    public function getId($productId, Request $request): Response
+    public function getId($slug, Request $request): Response
     {
-        $product = Product::with('variants')->find($productId);
+        $product = Product::with('variants')
+            ->where('slug', $slug)
+            ->first();
 
         if (!$product) {
             return inertia('Frontend/Pages/ProductNotFound', [

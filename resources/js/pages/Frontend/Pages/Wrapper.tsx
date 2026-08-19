@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, lazy } from 'react';
 import Navigation from '@/components/Navigation';
 import { router } from '@inertiajs/react';
+
+const Footer = lazy(() => import('@/components/Footer'));
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -20,6 +22,9 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
                 placeholder="Search products..."
             />
             {children}
+            <div className="mt-8">
+                <Footer />
+            </div>
         </div>
     );
 }
