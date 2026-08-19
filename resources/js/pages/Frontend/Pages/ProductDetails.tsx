@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
 import Wrapper from './Wrapper';
 import { Product, Variant } from '@/types';
+import { useCart } from './CartContext';
 
 interface Props {
     product: Product;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function ProductDetails({ product, variants, images }: Props) {
+    const { addToCart } = useCart();
+
     const sizes = variants.map((variant) => {
         return {
             value: variant.size,
@@ -28,14 +31,6 @@ export default function ProductDetails({ product, variants, images }: Props) {
     const [selectedColor, setSelectedColor] = useState(colors[0]);
     const [selectedSize, setSelectedSize] = useState('L');
     const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const [cartCount, setCartCount] = useState(1);
-
-    const handleAddToBag = () => {
-        alert(
-            `Added to bag: ${product.name} (${selectedColor.name}, Size ${selectedSize})`,
-        );
-        setCartCount((prev) => prev + 1);
-    };
 
     return (
         <Wrapper>
@@ -84,7 +79,7 @@ export default function ProductDetails({ product, variants, images }: Props) {
                                         }`}
                                     >
                                         <img
-                                            src={imgUrl}
+                                            src="#"
                                             alt={`Thumbnail ${index + 1}`}
                                             className="h-full w-full object-cover"
                                         />
@@ -116,8 +111,7 @@ export default function ProductDetails({ product, variants, images }: Props) {
                                             </svg>
                                         </span>
                                         <span className="text-sm font-medium text-gray-600">
-                                            {product.rating} (
-                                            {product.reviewCount} reviews)
+                                            3.2 ( 3622 reviews)
                                         </span>
                                     </div>
                                 </div>
@@ -197,10 +191,10 @@ export default function ProductDetails({ product, variants, images }: Props) {
                         {/* Actions */}
                         <div className="mt-8 space-y-3">
                             <button
-                                onClick={handleAddToBag}
+                                onClick={() => addToCart(product)}
                                 className="flex w-full items-center justify-center rounded-xl bg-black px-8 py-4 text-center text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none"
                             >
-                                Add to Bag
+                                Add to Cart
                             </button>
                             <button className="flex w-full items-center justify-center rounded-xl border border-gray-300 bg-white px-8 py-4 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none">
                                 <svg

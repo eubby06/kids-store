@@ -28,6 +28,7 @@ class ProductsController extends Controller
 
     public function getAll(Request $request): Response
     {
+        $category = $request->input('category');
         $searchQuery = $request->input('search');
         $isExclusive = $request->input('is_exclusive');
         $isNewArrival = $request->input('is_new_arrival');
@@ -41,10 +42,15 @@ class ProductsController extends Controller
                 })
                 ->latest()
                 ->get();
-        } elseif ($isExclusive) {
+        } else if ($isExclusive) {
             $products = Product::where('is_exclusive', true)->get();
-        } elseif ($isNewArrival) {
+        } else if ($isNewArrival) {
             $products = Product::where('is_new_arrival', true)->get();
+        } else if ($category) {
+            $products = Product::join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('products.*')
+                ->where('categories.slug', $category)
+                ->get();
         } else {
             $products = Product::all();
         }

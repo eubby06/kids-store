@@ -3,6 +3,7 @@ export type * from './auth';
 export interface Category {
     id: number;
     name: string;
+    slug: string;
     description: string;
     image: string;
 }

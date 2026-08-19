@@ -13,8 +13,13 @@ export default function Navigation({
 }: SearchInputProps) {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const isInitialMount = useRef<boolean>(true);
+    const { cartCount } = useCart();
+    const [isMounted, setIsMounted] = useState<boolean>(false);
 
     useEffect(() => {
+        // mark mounted after client hydration to avoid SSR/CSR text mismatch
+        setIsMounted(true);
+
         if (isInitialMount.current) {
             isInitialMount.current = false;
 
@@ -106,7 +111,10 @@ export default function Navigation({
                             )}
                         </div>
                         {/* Shopping Cart Icon (Simplified) */}
-                        <button className="relative p-2 text-slate-600 transition hover:text-indigo-600">
+                        <Link
+                            href="/cart"
+                            className="relative p-2 text-slate-600 transition hover:text-indigo-600"
+                        >
                             <svg
                                 className="h-6 w-6"
                                 fill="none"
@@ -121,9 +129,9 @@ export default function Navigation({
                                 />
                             </svg>
                             <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">
-                                0
+                                {isMounted ? cartCount : null}
                             </span>
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

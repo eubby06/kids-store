@@ -7,6 +7,7 @@ import React, {
     ReactNode,
 } from 'react';
 import { Product, CartItem, CartContextType } from '@/types';
+import { toast } from 'react-hot-toast';
 
 // Initialize context with undefined to force safe hook patterns
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -30,6 +31,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
     const addToCart = (product: Product) => {
         setCart((prevCart) => {
+            toast.success(`${product.name} added to cart`);
             const existing = prevCart.find((item) => item.id === product.id);
             if (existing) {
                 return prevCart.map((item) =>
@@ -73,7 +75,7 @@ export function CartProvider({ children }: CartProviderProps) {
                 cart,
                 addToCart,
                 updateQuantity,
-                removeFromCart, // 👈 Added to provider value
+                removeFromCart,
                 clearCart,
                 cartTotal,
                 cartCount,
@@ -87,8 +89,25 @@ export function CartProvider({ children }: CartProviderProps) {
 // Custom hook with built-in null checking for TS safety
 export const useCart = (): CartContextType => {
     const context = useContext(CartContext);
+
     if (context === undefined) {
-        throw new Error('useCart must be used within a CartProvider');
+        // Guard: instead of throwing (which crashes the app during hot reload
+        // or if a component is accidentally rendered outside the provider),
+        // return a safe fallback and warn in the console.
+        console.warn(
+            'useCart used outside of CartProvider — returning fallback API.',
+        );
+        const fallback: CartContextType = {
+            cart: [],
+            addToCart: () => {},
+            removeFromCart: () => {},
+            updateQuantity: () => {},
+            clearCart: () => {},
+            cartTotal: 0,
+            cartCount: 0,
+        };
+        return fallback;
     }
+
     return context;
 };
