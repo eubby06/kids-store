@@ -18,9 +18,14 @@ class Product extends Model
         'category_id',
         'price',
         'description',
+        'images',
         'is_featured',
         'is_new_arrival',
         'is_exclusive',
+    ];
+
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function variants()

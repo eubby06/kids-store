@@ -6,6 +6,8 @@ export interface Category {
     slug: string;
     description: string;
     image: string;
+    products_count: number;
+    status: 'Active' | 'Draft' | 'Archived';
 }
 
 export interface CategoriesProps {
@@ -19,7 +21,9 @@ export interface Product {
     category: string;
     description: string;
     price: number;
-    image: string;
+    images: string;
+    stock: number;
+    status: 'Published' | 'Draft';
 }
 
 export interface Variant {

@@ -56,7 +56,7 @@ class ProductsController extends Controller
         } else {
             $products = Product::all();
         }
-        
+
         return inertia('Frontend/Pages/Products', [
             'status' => session('status'),
             'products' => $products,

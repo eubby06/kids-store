@@ -14,9 +14,12 @@ class Variant extends Model
         'sku',
         'color',
         'size',
+        'image',
         'stock_count',
         'price_override',
         'is_on_sale',
+        'is_exclusive',
+        'is_new_arrival',
     ];
 
     public function product()

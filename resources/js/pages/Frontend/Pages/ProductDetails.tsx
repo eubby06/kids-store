@@ -59,7 +59,7 @@ export default function ProductDetails({ product, variants, images }: Props) {
                     <div className="space-y-4">
                         <div className="aspect-square w-full overflow-hidden rounded-2xl bg-gray-100">
                             <img
-                                src={product.image}
+                                src={`/storage/${product.images[0]}`}
                                 alt={`${product.name} view`}
                                 className="h-full w-full object-cover object-center transition-all duration-500"
                             />
