@@ -1,15 +1,50 @@
-# Stage 1: Build frontend assets
-FROM node:22-alpine AS node-builder
+# Stage 1: Install PHP dependencies
+FROM php:8.3-fpm-alpine AS composer-builder
+
+RUN apk add --no-cache \
+    sqlite \
+    sqlite-dev \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    curl
+
+RUN docker-php-ext-install pdo pdo_sqlite gd zip
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 COPY . .
+
+# Stage 2: Build frontend assets (needs PHP/artisan for wayfinder)
+FROM php:8.3-fpm-alpine AS node-builder
+
+RUN apk add --no-cache \
+    nodejs \
+    npm \
+    sqlite \
+    sqlite-dev \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    curl
+
+RUN docker-php-ext-install pdo pdo_sqlite gd zip
+
+WORKDIR /app
+
+COPY --from=composer-builder /app .
+RUN npm ci
+
 RUN npm run build
 
-# Stage 2: PHP application
+# Stage 3: PHP application
 FROM php:8.3-fpm-alpine
 
 # Install system dependencies
@@ -32,12 +67,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files and install dependencies
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts
-
-# Copy the rest of the application
-COPY . .
+# Copy the application (source + vendor) from composer-builder
+COPY --from=composer-builder /app .
 
 # Copy built frontend assets
 COPY --from=node-builder /app/public/build ./public/build
