@@ -7,6 +7,8 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -32,11 +34,12 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Deploy to EC2 via SSH
+        if: ${{ env.EC2_SSH_KEY != '' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 15.134.220.236
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ env.EC2_SSH_KEY }}
           script: |
             # 1. Navigate to home directory
             cd ~
