@@ -18,6 +18,19 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        // Dynamically redirect unauthenticated users
+        $middleware->redirectGuestsTo(function (Request $request) {
+            
+            // Check if the URL starts with /admin or admin/*
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return route('admin.login'); // Named route for admin login
+            }
+            
+            // Fallback for regular web users
+            return route('login'); 
+        });
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

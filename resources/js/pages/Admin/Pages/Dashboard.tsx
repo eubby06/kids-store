@@ -17,7 +17,10 @@ export default function AdminDashboard() {
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6">
                     <p className="text-sm font-medium tracking-wide text-indigo-600 uppercase">
-                        Admin
+                        Admin{' '}
+                        <Link href="/admin/logout" method="post">
+                            Logout
+                        </Link>
                     </p>
                     <h1 className="mt-1 text-3xl font-bold text-slate-900">
                         Dashboard

@@ -19,9 +19,11 @@ Route::get('/', [StoreFrontController::class, 'index'])->name('home');
 Route::get('/products', [ProductsController::class, 'getAll'])->name('products');
 Route::get('/products/{slug}', [ProductsController::class, 'getId'])->name('products.show');
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::inertia('/admin/login', 'Admin/Auth/Login')->name('admin.login');
-    Route::post('/login', [AdminController::class, 'login'])->name('admin.login');
+Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'postLogin'])->name('admin.login');
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
     Route::get('/', [AdminController::class, 'index'])->name('admin');
