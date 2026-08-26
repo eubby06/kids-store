@@ -36,7 +36,7 @@ jobs:
         with:
           host: 13.223.83.19
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }} # Fixed secret reference name here
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # 1. Log into your ECR registry inside the N. Virginia region from the server
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
