@@ -7,6 +7,8 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -31,12 +33,17 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: Skip EC2 deploy when SSH key is unavailable
+        if: ${{ env.DEPLOY_SSH_PRIVATE_KEY == '' }}
+        run: echo "SSH_PRIVATE_KEY is not configured; skipping EC2 deployment."
+
       - name: Deploy to EC2 via SSH
+        if: ${{ env.DEPLOY_SSH_PRIVATE_KEY != '' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 13.223.83.19
           username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ env.DEPLOY_SSH_PRIVATE_KEY }}
           script: |
             # 1. Log into your ECR registry inside the N. Virginia region from the server
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
