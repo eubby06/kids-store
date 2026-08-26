@@ -41,15 +41,20 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           key_id: laravel-deploy-key
           script: |
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ://amazonaws.com
-            docker pull ://amazonaws.com/laravel-inertia-app:latest
+            # 1. Log into your ECR registry safely using the full standard string formatting
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 425389088581.dkr.ecr.us-east-1.amazonaws.com
+
+            # 2. Force pull your freshly built image layers down to the server
+            docker pull 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
+
+            # 3. Stop and delete the old container version safely if it exists
             docker stop my-app-container || true
             docker rm my-app-container || true
 
-            # Fire up the container while explicitly injecting your GitHub secret as an environment variable
+            # 4. Fire up the fresh container while explicitly injecting your encryption keys
             docker run -d --name my-app-container \
               -p 80:80 \
               -e APP_ENV=production \
               -e APP_DEBUG=true \
               -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" \
-              ://amazonaws.com/laravel-inertia-app:latest
+              425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
