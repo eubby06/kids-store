@@ -41,20 +41,22 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           key_id: laravel-deploy-key
           script: |
-            # 1. Log into your ECR registry safely using the full standard string formatting
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 425389088581.dkr.ecr.us-east-1.amazonaws.com
-
-            # 2. Force pull your freshly built image layers down to the server
-            docker pull 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
-
-            # 3. Stop and delete the old container version safely if it exists
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ://amazonaws.com
+            docker pull ://amazonaws.com/laravel-inertia-app:latest
             docker stop my-app-container || true
             docker rm my-app-container || true
 
-            # 4. Fire up the fresh container while explicitly injecting your encryption keys
+            # Fire up the container with automated database initialization instructions
             docker run -d --name my-app-container \
               -p 80:80 \
               -e APP_ENV=production \
               -e APP_DEBUG=true \
               -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" \
-              425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
+              -e DB_CONNECTION=sqlite \
+              -e DB_DATABASE=/var/www/html/database/database.sqlite \
+              ://amazonaws.com/laravel-inertia-app:latest
+              
+            # Wait 2 seconds for the container to settle, then force-create the file and run migrations!
+            sleep 2
+            docker exec my-app-container touch database/database.sqlite
+            docker exec my-app-container php artisan migrate --force
