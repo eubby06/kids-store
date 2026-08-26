@@ -41,33 +41,24 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           key_id: laravel-deploy-key
           script: |
-            # 1. Log into your full ECR registry cleanly
+            # 1. Log into your ECR registry
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 425389088581.dkr.ecr.us-east-1.amazonaws.com
 
-            # 2. Force pull your freshly built image layers down to the server
+            # 2. Force pull the fresh image layers
             docker pull 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
 
-            # 3. Stop and delete the old container version safely if it exists
+            # 3. Clean up the old container version safely if it exists
             docker stop my-app-container || true
             docker rm my-app-container || true
 
-            # 4. Fire up the fresh container while explicitly injecting your key strings
-            docker run -d --name my-app-container \
-              -p 80:80 \
-              -e APP_ENV=production \
-              -e APP_DEBUG=true \
-              -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" \
-              -e DB_CONNECTION=sqlite \
-              -e DB_DATABASE=/var/www/html/database/database.sqlite \
-              ://amazonaws.com
+            # 4. Fire up the fresh container completely on ONE LINE to avoid script parsing typos
+            docker run -d --name my-app-container -p 80:80 -e APP_ENV=production -e APP_DEBUG=true -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" -e DB_CONNECTION=sqlite -e DB_DATABASE=/var/www/html/database/database.sqlite 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
               
-            # 5. Wait 3 seconds for the container to settle
-            sleep 3
+            # 5. Wait 4 seconds for the container to settle
+            sleep 4
 
-            # 6. Initialize database file and hand full read/write ownership to the web server
+            # 6. Initialize database permissions and apply database tables
             docker exec my-app-container touch database/database.sqlite
             docker exec my-app-container chown -R www-data:www-data database
             docker exec my-app-container chmod -R 775 database
-
-            # 7. Run database migrations safely
             docker exec my-app-container php artisan migrate --force
