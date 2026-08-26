@@ -2,13 +2,11 @@ name: Deploy to AWS ECR
 
 on:
   push:
-    branches: [main] # Triggers whenever you push code to your main branch
+    branches: [main, master] # Triggers on BOTH main and master to ensure it fires!
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    env:
-      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -18,7 +16,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1 # Change to your AWS region
+          aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -42,17 +40,17 @@ jobs:
           key_id: laravel-deploy-key
           script: |
             # 1. Log into your ECR registry
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ://amazonaws.com
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 425389088581.dkr.ecr.us-east-1.amazonaws.com
 
             # 2. Force pull the fresh image layers
-            docker pull ://amazonaws.com/laravel-inertia-app:latest
+            docker pull 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
 
             # 3. Clean up the old container version safely if it exists
             docker stop my-app-container || true
             docker rm my-app-container || true
 
             # 4. Fire up the fresh container completely on ONE LINE pointed to your AWS RDS MySQL
-            docker run -d --name my-app-container -p 80:80 -e APP_ENV=production -e APP_DEBUG=true -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" -e DB_CONNECTION=mysql -e DB_HOST="${{ secrets.DB_HOST }}" -e DB_PORT="${{ secrets.DB_PORT }}" -e DB_DATABASE="${{ secrets.DB_DATABASE }}" -e DB_USERNAME="${{ secrets.DB_USERNAME }}" -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" ://amazonaws.com/laravel-inertia-app:latest
+            docker run -d --name my-app-container -p 80:80 -e APP_ENV=production -e APP_DEBUG=true -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" -e DB_CONNECTION=mysql -e DB_HOST="${{ secrets.DB_HOST }}" -e DB_PORT="${{ secrets.DB_PORT }}" -e DB_DATABASE="${{ secrets.DB_DATABASE }}" -e DB_USERNAME="${{ secrets.DB_USERNAME }}" -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
               
             # 5. Wait 4 seconds for the container to settle
             sleep 4
@@ -61,4 +59,4 @@ jobs:
             docker exec my-app-container php artisan migrate --force
 
             # 7. Automated Production Admin User Seed
-            docker exec my-app-container php artisan eval "\App\Models\User::firstOrCreate(['email' => 'admin@example.com'], ['name' => 'Admin User', 'password' => \Illuminate\Support\Facades\Hash::make('YourSecurePassword123!')]);"
+            docker exec my-app-container php artisan eval "\App\Models\User::firstOrCreate(['email' => 'admin@example.com'], ['name' => 'Admin User', 'password' => \Illuminate\Support\Facades\Hash::make('password')]);"
