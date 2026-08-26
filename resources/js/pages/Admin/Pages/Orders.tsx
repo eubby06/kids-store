@@ -141,7 +141,7 @@ export default function AdminOrdersPage() {
                                     </td>
                                     <td className="px-5 py-4">
                                         <button className="font-medium text-indigo-600 hover:text-indigo-500">
-                                            View
+                                            View Now
                                         </button>
                                     </td>
                                 </tr>
