@@ -59,9 +59,15 @@ jobs:
               -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" \
               -e DB_CONNECTION=sqlite \
               -e DB_DATABASE=/var/www/html/database/database.sqlite \
-              425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
+              ://amazonaws.com
               
-            # 5. Wait 3 seconds for the container to settle, then initialize your sqlite tables
+            # 5. Wait 3 seconds for the container to settle
             sleep 3
+
+            # 6. Initialize database file and hand full read/write ownership to the web server
             docker exec my-app-container touch database/database.sqlite
+            docker exec my-app-container chown -R www-data:www-data database
+            docker exec my-app-container chmod -R 775 database
+
+            # 7. Run database migrations safely
             docker exec my-app-container php artisan migrate --force
