@@ -39,11 +39,17 @@ jobs:
           host: ${{ secrets.EC2_HOST_IP }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          # FORCES GITHUB TO USE THE CORRECT SSH KEY FORMATTING TYPE FOR UBUNTU 24.04
           key_id: laravel-deploy-key
           script: |
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 425389088581.dkr.ecr.us-east-1.amazonaws.com
-            docker pull 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ://amazonaws.com
+            docker pull ://amazonaws.com/laravel-inertia-app:latest
             docker stop my-app-container || true
             docker rm my-app-container || true
-            docker run -d --name my-app-container -p 80:80 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
+
+            # Fire up the container while explicitly injecting your GitHub secret as an environment variable
+            docker run -d --name my-app-container \
+              -p 80:80 \
+              -e APP_ENV=production \
+              -e APP_DEBUG=true \
+              -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" \
+              ://amazonaws.com/laravel-inertia-app:latest
