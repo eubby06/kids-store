@@ -37,7 +37,7 @@ jobs:
         if: ${{ env.EC2_SSH_KEY != '' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: 15.134.220.236
+          host: 13.223.83.19
           username: ubuntu
           key: ${{ env.EC2_SSH_KEY }}
           script: |
