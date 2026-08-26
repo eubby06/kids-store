@@ -7,8 +7,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    env:
-      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -18,7 +16,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1 # Change to your AWS region
+          aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -34,15 +32,21 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Deploy to EC2 via SSH
-        if: ${{ env.EC2_SSH_KEY != '' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: 15.134.220.236
+          host: 13.223.83.19
           username: ubuntu
-          key: ${{ env.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }} # Fixed secret reference name here
           script: |
-            # 1. Navigate to home directory
-            cd ~
+            # 1. Log into your ECR registry inside the N. Virginia region from the server
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
 
-            # 2. Re-run your working native deployment script as root
-            sudo ./deploy_native.sh
+            # 2. Force pull your freshly built image layers down to the server
+            docker pull ${{ steps.login-ecr.outputs.registry }}/laravel-inertia-app:latest
+
+            # 3. Stop and delete the old container version safely
+            docker stop my-app-container || true
+            docker rm my-app-container || true
+
+            # 4. Fire up the fresh container mapping the web traffic on port 80
+            docker run -d --name my-app-container -p 80:80 ${{ steps.login-ecr.outputs.registry }}/laravel-inertia-app:latest
