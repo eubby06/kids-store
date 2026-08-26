@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import Layout from './Layout';
 
 const orders = [
     {
@@ -26,16 +27,14 @@ const orders = [
 
 export default function AdminOrdersPage() {
     return (
-        <div className="min-h-screen bg-slate-50">
-            <Head title="Orders" />
-
+        <Layout title="Orders">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6 flex items-center justify-between">
                     <div>
                         <p className="text-sm font-medium tracking-wide text-indigo-600 uppercase">
                             Admin
                         </p>
-                        <h1 className="mt-1 text-3xl font-bold text-slate-900">
+                        <h1 className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">
                             Orders
                         </h1>
                     </div>
@@ -46,35 +45,43 @@ export default function AdminOrdersPage() {
                 </div>
 
                 <div className="mb-6 grid gap-4 md:grid-cols-4">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Total Orders</p>
-                        <p className="mt-2 text-3xl font-bold text-slate-900">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Total Orders
+                        </p>
+                        <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                             512
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Paid</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Paid
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-emerald-600">
                             341
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Processing</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Processing
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-amber-600">
                             88
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Shipped</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Shipped
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-sky-600">
                             83
                         </p>
                     </div>
                 </div>
 
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-                        <h2 className="text-lg font-semibold text-slate-900">
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                             Recent Orders
                         </h2>
                         <Link
@@ -85,8 +92,8 @@ export default function AdminOrdersPage() {
                         </Link>
                     </div>
 
-                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-600">
+                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-800">
+                        <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800/60 dark:text-slate-400">
                             <tr>
                                 <th className="px-5 py-3 font-medium">Order</th>
                                 <th className="px-5 py-3 font-medium">
@@ -102,13 +109,13 @@ export default function AdminOrdersPage() {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 text-slate-700">
+                        <tbody className="divide-y divide-slate-200 text-slate-700 dark:divide-slate-800 dark:text-slate-300">
                             {orders.map((order) => (
                                 <tr
                                     key={order.id}
-                                    className="hover:bg-slate-50"
+                                    className="hover:bg-slate-50 dark:hover:bg-slate-800/60"
                                 >
-                                    <td className="px-5 py-4 font-medium text-slate-900">
+                                    <td className="px-5 py-4 font-medium text-slate-900 dark:text-white">
                                         {order.id}
                                     </td>
                                     <td className="px-5 py-4">
@@ -143,6 +150,6 @@ export default function AdminOrdersPage() {
                     </table>
                 </div>
             </div>
-        </div>
+        </Layout>
     );
 }

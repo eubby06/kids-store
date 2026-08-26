@@ -1,5 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import Layout from './Layout';
 
 const slugify = (value: string): string =>
     value
@@ -43,20 +44,9 @@ export default function AdminCategoryCreatePage({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <Head title="Add Category" />
-
+        <Layout title="Add Category">
             <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <p className="text-sm font-medium tracking-wide text-indigo-600 uppercase">
-                            Admin
-                        </p>
-                        <h1 className="mt-1 text-3xl font-bold text-slate-900">
-                            Add Category
-                        </h1>
-                    </div>
-
                     <Link
                         href="/admin/categories"
                         className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
@@ -67,12 +57,12 @@ export default function AdminCategoryCreatePage({
 
                 <form
                     onSubmit={submit}
-                    className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+                    className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
                 >
                     <div>
                         <label
                             htmlFor="name"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
                         >
                             Category Name
                         </label>
@@ -84,7 +74,7 @@ export default function AdminCategoryCreatePage({
                             className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.name
                                     ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    : 'border-slate-200 focus:ring-indigo-500/20 dark:border-slate-800'
                             }`}
                             placeholder="e.g. Apparel"
                             required
@@ -99,7 +89,7 @@ export default function AdminCategoryCreatePage({
                     <div>
                         <label
                             htmlFor="slug"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
                         >
                             Slug
                         </label>
@@ -114,7 +104,7 @@ export default function AdminCategoryCreatePage({
                             className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.slug
                                     ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    : 'border-slate-200 focus:ring-indigo-500/20 dark:border-slate-800'
                             }`}
                             placeholder="e.g. apparel"
                             required
@@ -132,7 +122,7 @@ export default function AdminCategoryCreatePage({
                     <div>
                         <label
                             htmlFor="description"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
                         >
                             Description
                         </label>
@@ -146,7 +136,7 @@ export default function AdminCategoryCreatePage({
                             className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.description
                                     ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    : 'border-slate-200 focus:ring-indigo-500/20 dark:border-slate-800'
                             }`}
                             placeholder="Short category description"
                         />
@@ -157,10 +147,10 @@ export default function AdminCategoryCreatePage({
                         )}
                     </div>
 
-                    <div className="flex items-center justify-end gap-3 border-t border-slate-200 pt-5">
+                    <div className="flex items-center justify-end gap-3 border-t border-slate-200 pt-5 dark:border-slate-800">
                         <Link
                             href="/admin/categories"
-                            className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                            className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800/60"
                         >
                             Cancel
                         </Link>
@@ -174,6 +164,6 @@ export default function AdminCategoryCreatePage({
                     </div>
                 </form>
             </div>
-        </div>
+        </Layout>
     );
 }

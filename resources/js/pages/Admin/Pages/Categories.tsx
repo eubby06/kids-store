@@ -1,6 +1,7 @@
 import { Category } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { toast } from 'react-hot-toast';
+import Layout from './Layout';
 
 interface AdminCategoriesPageProps {
     categories: Category[];
@@ -25,20 +26,9 @@ export default function AdminCategoriesPage({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <Head title="Categories" />
-
+        <Layout title="Categories">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <p className="text-sm font-medium tracking-wide text-indigo-600 uppercase">
-                            Admin
-                        </p>
-                        <h1 className="mt-1 text-3xl font-bold text-slate-900">
-                            Categories
-                        </h1>
-                    </div>
-
                     <Link
                         href="/admin/categories/create"
                         className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
@@ -48,16 +38,18 @@ export default function AdminCategoriesPage({
                 </div>
 
                 <div className="mb-6 grid gap-4 md:grid-cols-3">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
                             Total Categories
                         </p>
-                        <p className="mt-2 text-3xl font-bold text-slate-900">
+                        <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                             {categories.length}
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Active</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Active
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-emerald-600">
                             {
                                 categories.filter(
@@ -66,8 +58,10 @@ export default function AdminCategoriesPage({
                             }
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Draft</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Draft
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-amber-600">
                             {
                                 categories.filter(
@@ -78,9 +72,9 @@ export default function AdminCategoriesPage({
                     </div>
                 </div>
 
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-                        <h2 className="text-lg font-semibold text-slate-900">
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                             Category List
                         </h2>
                         <Link
@@ -91,8 +85,8 @@ export default function AdminCategoriesPage({
                         </Link>
                     </div>
 
-                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-600">
+                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-800">
+                        <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800/60 dark:text-slate-400">
                             <tr>
                                 <th className="px-5 py-3 font-medium">Name</th>
                                 <th className="px-5 py-3 font-medium">
@@ -106,13 +100,13 @@ export default function AdminCategoriesPage({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 text-slate-700">
+                        <tbody className="divide-y divide-slate-200 text-slate-700 dark:divide-slate-800 dark:text-slate-300">
                             {categories.map((category) => (
                                 <tr
                                     key={category.id}
-                                    className="hover:bg-slate-50"
+                                    className="hover:bg-slate-50 dark:hover:bg-slate-800/60"
                                 >
-                                    <td className="px-5 py-4 font-medium text-slate-900">
+                                    <td className="px-5 py-4 font-medium text-slate-900 dark:text-white">
                                         {category.name}
                                     </td>
                                     <td className="px-5 py-4">
@@ -126,7 +120,7 @@ export default function AdminCategoriesPage({
                                                     : category.status ===
                                                         'Draft'
                                                       ? 'bg-amber-100 text-amber-700'
-                                                      : 'bg-slate-200 text-slate-600'
+                                                      : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
                                             }`}
                                         >
                                             {category.status}
@@ -156,6 +150,6 @@ export default function AdminCategoriesPage({
                     </table>
                 </div>
             </div>
-        </div>
+        </Layout>
     );
 }

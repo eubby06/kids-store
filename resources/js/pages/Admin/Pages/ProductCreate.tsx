@@ -2,6 +2,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import { Category } from '@/types';
 import toast from 'react-hot-toast';
+import Layout from './Layout';
 
 interface AdminProductCreatePageProps {
     product?: {
@@ -92,7 +93,7 @@ export default function AdminProductCreatePage({
         ...data.existing_images.map((path) => `/storage/${path}`),
         ...imagePreviews,
     ];
-    console.log(allImagePreviews);
+
     useEffect(() => {
         imagePreviewsRef.current = imagePreviews;
     }, [imagePreviews]);
@@ -200,20 +201,9 @@ export default function AdminProductCreatePage({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <Head title={product ? 'Edit Product' : 'Add Product'} />
-
+        <Layout title={product ? 'Edit Product' : 'Add Product'}>
             <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <p className="text-sm font-medium tracking-wide text-indigo-600 uppercase">
-                            Admin
-                        </p>
-                        <h1 className="mt-1 text-3xl font-bold text-slate-900">
-                            {product ? 'Edit Product' : 'Add Product'}
-                        </h1>
-                    </div>
-
                     <Link
                         href="/admin/products"
                         className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
@@ -423,7 +413,7 @@ export default function AdminProductCreatePage({
                     <div className="border-t border-slate-200 pt-5">
                         <div className="mb-4 flex items-center justify-between">
                             <div>
-                                <h2 className="text-lg font-semibold text-slate-900">
+                                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                                     Product Variants
                                 </h2>
                                 <p className="mt-1 text-sm text-slate-500">
@@ -619,6 +609,6 @@ export default function AdminProductCreatePage({
                     </div>
                 </form>
             </div>
-        </div>
+        </Layout>
     );
 }

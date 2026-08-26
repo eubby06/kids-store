@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Product } from '@/types';
 import toast from 'react-hot-toast';
+import Layout from './Layout';
 
 interface AdminProductsPageProps {
     products: Product[];
@@ -22,20 +23,9 @@ export default function AdminProductsPage({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <Head title="Products" />
-
+        <Layout title="Products">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <p className="text-sm font-medium tracking-wide text-indigo-600 uppercase">
-                            Admin
-                        </p>
-                        <h1 className="mt-1 text-3xl font-bold text-slate-900">
-                            Products
-                        </h1>
-                    </div>
-
                     <Link
                         href="/admin/products/create"
                         className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
@@ -45,29 +35,35 @@ export default function AdminProductsPage({
                 </div>
 
                 <div className="mb-6 grid gap-4 md:grid-cols-3">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Total Products</p>
-                        <p className="mt-2 text-3xl font-bold text-slate-900">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Total Products
+                        </p>
+                        <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                             128
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Published</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Published
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-emerald-600">
                             96
                         </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p className="text-sm text-slate-500">Low Stock</p>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Low Stock
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-amber-600">
                             14
                         </p>
                     </div>
                 </div>
 
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-                        <h2 className="text-lg font-semibold text-slate-900">
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                             Product Inventory
                         </h2>
                         <Link
@@ -78,8 +74,8 @@ export default function AdminProductsPage({
                         </Link>
                     </div>
 
-                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-600">
+                    <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-800">
+                        <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800/60 dark:text-slate-400">
                             <tr>
                                 <th className="px-5 py-3 font-medium">
                                     Product
@@ -97,13 +93,13 @@ export default function AdminProductsPage({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 text-slate-700">
+                        <tbody className="divide-y divide-slate-200 text-slate-700 dark:divide-slate-800 dark:text-slate-300">
                             {products.map((product) => (
                                 <tr
                                     key={product.id}
-                                    className="hover:bg-slate-50"
+                                    className="hover:bg-slate-50 dark:hover:bg-slate-800/60"
                                 >
-                                    <td className="px-5 py-4 font-medium text-slate-900">
+                                    <td className="px-5 py-4 font-medium text-slate-900 dark:text-white">
                                         {product.name}
                                     </td>
                                     <td className="px-5 py-4">
@@ -150,6 +146,6 @@ export default function AdminProductsPage({
                     </table>
                 </div>
             </div>
-        </div>
+        </Layout>
     );
 }

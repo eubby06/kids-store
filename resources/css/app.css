@@ -1,7 +1,17 @@
 @import 'tailwindcss';
 
-@source '../views';
+/* Deep recursive matching covers any nesting depths for tsx, ts, jsx, and js */
+@source "../js/**/*.tsx";
+@source "../js/**/*.ts";
+@source "../js/**/*.jsx";
+@source "../js/**/*.js";
+
+/* Match your native blade view files */
+@source '../views/**/*.blade.php';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+/* Correct Tailwind v4 manual class selection wrapper */
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
     --font-sans:
