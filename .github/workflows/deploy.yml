@@ -37,18 +37,13 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST_IP }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          # FORCES GITHUB TO USE THE CORRECT SSH KEY FORMATTING TYPE FOR UBUNTU 24.04
+          key_id: laravel-deploy-key
           script: |
-            # 1. Log into your ECR registry inside the N. Virginia region from the server
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-
-            # 2. Force pull your freshly built image layers down to the server
-            docker pull ${{ steps.login-ecr.outputs.registry }}/laravel-inertia-app:latest
-
-            # 3. Stop and delete the old container version safely if it exists
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 425389088581.dkr.ecr.us-east-1.amazonaws.com
+            docker pull 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
             docker stop my-app-container || true
             docker rm my-app-container || true
-
-            # 4. Fire up the fresh container mapping public port 80 directly into Nginx
-            docker run -d --name my-app-container -p 80:80 ${{ steps.login-ecr.outputs.registry }}/laravel-inertia-app:latest
+            docker run -d --name my-app-container -p 80:80 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
