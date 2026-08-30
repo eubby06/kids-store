@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ProductListProps } from '@/types';
+import { ProductListProps } from '@/types/product';
 import { useCart } from '../pages/Frontend/Pages/CartContext';
 
 export default function ProductList({ products = [] }: ProductListProps) {

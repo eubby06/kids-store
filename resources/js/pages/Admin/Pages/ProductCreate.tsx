@@ -1,8 +1,18 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import { Category } from '@/types';
+import { Category } from '@/types/category';
 import toast from 'react-hot-toast';
 import Layout from './Layout';
+
+interface VariantForm {
+    key: string;
+    id?: number;
+    size: string;
+    color: string;
+    is_exclusive: boolean;
+    is_new_arrival: boolean;
+    parent_image_index: number | null;
+}
 
 interface AdminProductCreatePageProps {
     product?: {
@@ -13,26 +23,9 @@ interface AdminProductCreatePageProps {
         price: string;
         status: string;
         images: string[];
-        variants: {
-            id: number;
-            size: string;
-            color: string;
-            is_exclusive: boolean;
-            is_new_arrival: boolean;
-            parent_image_index: number | null;
-        }[];
+        variants: VariantForm[];
     };
     categories: Category[];
-}
-
-interface VariantForm {
-    key: string;
-    id?: number;
-    size: string;
-    color: string;
-    is_exclusive: boolean;
-    is_new_arrival: boolean;
-    parent_image_index: number | null;
 }
 
 const createVariantKey = (): string =>

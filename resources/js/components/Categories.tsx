@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { CategoriesProps } from '@/types';
+import { CategoriesProps } from '@/types/category';
 
 export default function Categories({ categories = [] }: CategoriesProps) {
     return (

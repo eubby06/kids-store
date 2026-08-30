@@ -6,7 +6,8 @@ import React, {
     useEffect,
     ReactNode,
 } from 'react';
-import { Product, CartItem, CartContextType } from '@/types';
+import { CartItem, CartContextType } from '@/types';
+import { Product } from '@/types/product';
 import { toast } from 'react-hot-toast';
 
 // Initialize context with undefined to force safe hook patterns
@@ -17,17 +18,25 @@ interface CartProviderProps {
 }
 
 export function CartProvider({ children }: CartProviderProps) {
-    const [cart, setCart] = useState<CartItem[]>(() => {
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('react_ts_cart');
-            return saved ? JSON.parse(saved) : [];
-        }
-        return [];
-    });
+    // Start empty on every render so the client's first pass matches the
+    // server-rendered HTML; the saved cart is loaded after mount below.
+    const [cart, setCart] = useState<CartItem[]>([]);
+    const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
+        const saved = localStorage.getItem('react_ts_cart');
+        if (saved) {
+            setCart(JSON.parse(saved));
+        }
+        setIsHydrated(true);
+    }, []);
+
+    useEffect(() => {
+        if (!isHydrated) {
+            return;
+        }
         localStorage.setItem('react_ts_cart', JSON.stringify(cart));
-    }, [cart]);
+    }, [cart, isHydrated]);
 
     const addToCart = (product: Product) => {
         setCart((prevCart) => {
@@ -61,7 +70,11 @@ export function CartProvider({ children }: CartProviderProps) {
         setCart((prevCart) => prevCart.filter((item) => item.id !== id));
     };
 
-    const clearCart = () => setCart([]);
+    // Inside your CartContext.tsx
+    const clearCart = () => {
+        setCart([]); // Clear React state memory
+        localStorage.removeItem('react_ts_cart'); // Wipe browser storage
+    };
 
     const cartTotal = cart.reduce(
         (sum, item) => sum + item.price * item.quantity,

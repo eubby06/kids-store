@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Product } from '@/types';
+import { Product } from '@/types/product';
 import toast from 'react-hot-toast';
 import Layout from './Layout';
 

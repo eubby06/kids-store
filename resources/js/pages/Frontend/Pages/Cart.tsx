@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import Wrapper from './Wrapper';
+import { router } from '@inertiajs/react';
 
 export default function CartPage() {
     return (
@@ -29,6 +30,19 @@ function CartPageContent() {
         } else {
             alert('Invalid promo code');
         }
+    };
+
+    const handleProceedCheckout = () => {
+        const localCart = localStorage.getItem('react_ts_cart');
+
+        if (!localCart) {
+            alert('cart is empty');
+            return;
+        }
+
+        router.post('checkout/initialize', {
+            cart: JSON.parse(localCart),
+        });
     };
 
     return (
@@ -95,7 +109,7 @@ function CartPageContent() {
                                                   {/* Product Thumbnail */}
                                                   <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-100">
                                                       <img
-                                                          src={item.image}
+                                                          src={item.images}
                                                           alt={item.name}
                                                           className="h-full w-full object-cover object-center"
                                                       />
@@ -260,7 +274,10 @@ function CartPageContent() {
                                 </form>
 
                                 {/* Checkout Button */}
-                                <button className="mt-6 w-full rounded-xl bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none">
+                                <button
+                                    onClick={handleProceedCheckout}
+                                    className="mt-6 flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none"
+                                >
                                     Proceed to Checkout
                                 </button>
                             </div>

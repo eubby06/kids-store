@@ -1,7 +1,7 @@
 // components/ProductCard.tsx
 import React from 'react';
 import { useCart } from '../pages/Frontend/Pages/CartContext';
-import { Product } from '@/types';
+import { Product } from '@/types/product';
 
 interface ProductCardProps {
     product: Product;

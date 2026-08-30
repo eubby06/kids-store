@@ -31,15 +31,21 @@ createInertiaApp({
             return;
         }
 
-        // --- 3. REHYDRATE INSTEAD OF BLANK RENDER ---
-        // Uses hydrateRoot to attach event listeners smoothly onto server-side HTML
-        hydrateRoot(
-            container,
+        const app = (
             <CartProvider>
                 <App {...props} />
                 <Toaster position="top-right" />
-            </CartProvider>,
+            </CartProvider>
         );
+
+        // --- 3. HYDRATE ONLY WHEN SERVER-RENDERED MARKUP EXISTS ---
+        // SSR is not always running (e.g. no built SSR bundle), so the container
+        // may be empty; hydrating an empty container causes a hydration mismatch.
+        if (container.hasChildNodes()) {
+            hydrateRoot(container, app);
+        } else {
+            createRoot(container).render(app);
+        }
 
         initializeTheme();
     },

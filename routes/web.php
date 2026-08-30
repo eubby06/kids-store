@@ -6,6 +6,9 @@ use App\Http\Controllers\StoreFrontController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminProductsController;
 use App\Http\Controllers\AdminCategoriesController;
+use App\Http\Controllers\AdminOrdersController;
+use App\Http\Controllers\CheckoutController;
+
 
 // customer facing
 Route::inertia('/login', 'Frontend/Auth/Login')->name('login');
@@ -18,6 +21,10 @@ Route::inertia('/terms-of-service', 'Frontend/Pages/TermsOfService')->name('term
 Route::get('/', [StoreFrontController::class, 'index'])->name('home');
 Route::get('/products', [ProductsController::class, 'getAll'])->name('products');
 Route::get('/products/{slug}', [ProductsController::class, 'getId'])->name('products.show');
+Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('/checkout/show', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout/initialize', [CheckoutController::class, 'initialize'])->name('checkout.initialize');
 
 Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'postLogin'])->name('admin.login');
@@ -25,7 +32,7 @@ Route::post('/admin/login', [AdminController::class, 'postLogin'])->name('admin.
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
+    Route::get('/orders', [AdminOrdersController::class, 'index'])->name('admin.orders');
     Route::get('/', [AdminController::class, 'index'])->name('admin');
 
     Route::group(['prefix' => 'categories'], function () {
