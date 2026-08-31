@@ -23,10 +23,10 @@ return new class extends Migration
             
             $table->text('description')->nullable(); // Optional detailed product overview
             $table->boolean('is_featured')->default(false); // Quick toggle for landing page exhibits
-            $table->boolean('is_new_arrival')->default(false)->after('is_on_sale');
-            $table->boolean('is_exclusive')->default(false)->after('is_new_arrival');
+            $table->boolean('is_new_arrival')->default(false);
+            $table->boolean('is_exclusive')->default(false); 
 
-            $table->timestamps(); // Created_at and updated_at timestamps
+            $table->timestamps();
         });
     }
 
