@@ -52,11 +52,11 @@ jobs:
             # 4. Fire up the fresh container completely on ONE LINE pointed to your AWS RDS MySQL
             docker run -d --name my-app-container -p 80:80 -e APP_ENV=production -e APP_DEBUG=true -e APP_KEY="${{ secrets.LARAVEL_APP_KEY }}" -e DB_CONNECTION=mysql -e DB_HOST="${{ secrets.DB_HOST }}" -e DB_PORT="${{ secrets.DB_PORT }}" -e DB_DATABASE="${{ secrets.DB_DATABASE }}" -e DB_USERNAME="${{ secrets.DB_USERNAME }}" -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" 425389088581.dkr.ecr.us-east-1.amazonaws.com/laravel-inertia-app:latest
               
-            # 5. Wait 4 seconds for the container to settle
-            sleep 4
+            # 5. Wait 5 seconds for the container to settle
+            sleep 5
 
             # 6. Apply database tables directly to your RDS cluster cloud space
             docker exec my-app-container php artisan migrate --force
 
-            # 7. Automated Production Admin User Seed
-            docker exec my-app-container php artisan eval "\App\Models\User::firstOrCreate(['email' => 'admin@example.com'], ['name' => 'Admin User', 'password' => \Illuminate\Support\Facades\Hash::make('password')]);"
+            # 7. ✅ FIXED RUNTIME COMMAND: Executes raw database creations using the proper Tinker hook
+            docker exec my-app-container php artisan tinker --execute="\App\Models\User::firstOrCreate(['email' => 'admin@example.com'], ['name' => 'Admin User', 'password' => \Illuminate\Support\Facades\Hash::make('password')]);"
