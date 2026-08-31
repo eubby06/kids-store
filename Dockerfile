@@ -10,7 +10,7 @@ RUN apk add --no-cache \
     unzip \
     curl
 
-RUN docker-php-ext-install pdo pdo_sqlite gd zip
+RUN docker-php-ext-install pdo pdo_sqlite gd zip pdo_mysql bcmath
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -35,7 +35,7 @@ RUN apk add --no-cache \
     unzip \
     curl
 
-RUN docker-php-ext-install pdo pdo_sqlite gd zip
+RUN docker-php-ext-install pdo pdo_sqlite pdo_mysql bcmath gd zip
 
 WORKDIR /app
 
@@ -60,7 +60,7 @@ RUN apk add --no-cache \
     curl
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_sqlite gd zip
+RUN docker-php-ext-install pdo pdo_sqlite pdo_mysql bcmath gd zip
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
