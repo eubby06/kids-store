@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import React, { useState, useRef, useEffect } from 'react';
 import { useCart } from '../pages/Frontend/Pages/CartContext';
+import HybridSearchBar from '@/components/HybridSearchBar';
 
 interface SearchInputProps {
     onSearch: (term: string) => void;
@@ -81,34 +82,8 @@ export default function Navigation({
 
                     {/* Search & Actions */}
                     <div className="flex items-center gap-4">
-                        <div className="relative hidden sm:block">
-                            <input
-                                value={searchTerm}
-                                onChange={handleChange}
-                                placeholder={placeholder}
-                                type="text"
-                                className="w-60 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-xs transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 focus:outline-none"
-                            />
-                            {searchTerm && (
-                                <button
-                                    onClick={handleClear}
-                                    className="absolute top-1/2 right-2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
-                                >
-                                    <svg
-                                        className="h-4 w-4"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                            )}
+                        <div className="hidden max-w-lg flex-1 sm:block">
+                            <HybridSearchBar />
                         </div>
                         {/* Shopping Cart Icon (Simplified) */}
                         <Link

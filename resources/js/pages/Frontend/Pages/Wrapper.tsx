@@ -1,6 +1,7 @@
 import { useState, lazy } from 'react';
 import Navigation from '@/components/Navigation';
 import { router } from '@inertiajs/react';
+import AiChatBot from '@/components/AiChatBot';
 
 const Footer = lazy(() => import('@/components/Footer'));
 
@@ -22,6 +23,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
                 placeholder="Search products..."
             />
             {children}
+            <AiChatBot />
             <div className="mt-8">
                 <Footer />
             </div>

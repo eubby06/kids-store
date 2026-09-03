@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminProductsController;
 use App\Http\Controllers\AdminCategoriesController;
 use App\Http\Controllers\AdminOrdersController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\ProductSearchController;
 
 
 // customer facing
@@ -25,6 +27,8 @@ Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/show', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/checkout/initialize', [CheckoutController::class, 'initialize'])->name('checkout.initialize');
+Route::post('/chatbot/query', ChatbotController::class)->name('chatbot.query');
+Route::get('/api/search/autocomplete', ProductSearchController::class)->name('api.search.autocomplete');
 
 Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'postLogin'])->name('admin.login');
