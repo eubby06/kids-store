@@ -71,7 +71,7 @@ export default function AdminCategoryCreatePage({
                             type="text"
                             value={data.name}
                             onChange={handleNameChange}
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border px-3 py-2 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.name
                                     ? 'border-red-300 focus:ring-red-500/20'
                                     : 'border-slate-200 focus:ring-indigo-500/20 dark:border-slate-800'
@@ -101,7 +101,7 @@ export default function AdminCategoryCreatePage({
                                 setSlugEdited(true);
                                 setData('slug', e.target.value);
                             }}
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border px-3 py-2 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.slug
                                     ? 'border-red-300 focus:ring-red-500/20'
                                     : 'border-slate-200 focus:ring-indigo-500/20 dark:border-slate-800'
@@ -133,7 +133,7 @@ export default function AdminCategoryCreatePage({
                             onChange={(e) =>
                                 setData('description', e.target.value)
                             }
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border px-3 py-2 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.description
                                     ? 'border-red-300 focus:ring-red-500/20'
                                     : 'border-slate-200 focus:ring-indigo-500/20 dark:border-slate-800'
