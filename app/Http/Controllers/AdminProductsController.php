@@ -46,9 +46,10 @@ class AdminProductsController extends Controller
             'status' => 'required|in:Draft,Published',
             'images' => 'nullable|array',
             'images.*' => 'image|max:4096',
-            'variants' => 'nullable|array',
+            'variants' => ['nullable', 'array', $this->uniqueVariantComboRule()],
             'variants.*.size' => 'nullable|string|max:50',
             'variants.*.color' => 'nullable|string|max:50',
+            'variants.*.is_featured' => 'nullable|boolean',
             'variants.*.is_exclusive' => 'nullable|boolean',
             'variants.*.is_new_arrival' => 'nullable|boolean',
             'variants.*.parent_image_index' => 'nullable|integer|min:0',
@@ -89,6 +90,7 @@ class AdminProductsController extends Controller
                     'size' => $variant['size'] ?? null,
                     'color' => $variant['color'] ?? null,
                     'image' => $variantImage,
+                    'is_featured' => (bool) ($variant['is_featured'] ?? false),
                     'is_exclusive' => (bool) ($variant['is_exclusive'] ?? false),
                     'is_new_arrival' => (bool) ($variant['is_new_arrival'] ?? false),
                 ]);
@@ -123,6 +125,7 @@ class AdminProductsController extends Controller
                         'id' => $variant->id,
                         'size' => $variant->size,
                         'color' => $variant->color,
+                        'is_featured' => $variant->is_featured,
                         'is_exclusive' => $variant->is_exclusive,
                         'is_new_arrival' => $variant->is_new_arrival,
                         'parent_image_index' => $imageIndex !== false ? $imageIndex : null,
@@ -146,10 +149,11 @@ class AdminProductsController extends Controller
             'images.*' => 'image|max:4096',
             'existing_images' => 'nullable|array',
             'existing_images.*' => 'string',
-            'variants' => 'nullable|array',
+            'variants' => ['nullable', 'array', $this->uniqueVariantComboRule()],
             'variants.*.id' => 'nullable|exists:variants,id',
             'variants.*.size' => 'nullable|string|max:50',
             'variants.*.color' => 'nullable|string|max:50',
+            'variants.*.is_featured' => 'nullable|boolean',
             'variants.*.is_exclusive' => 'nullable|boolean',
             'variants.*.is_new_arrival' => 'nullable|boolean',
             'variants.*.parent_image_index' => 'nullable|integer|min:0',
@@ -181,26 +185,38 @@ class AdminProductsController extends Controller
             // uploaded image list, matching the order shown on the frontend
             $combinedImages = array_merge($retainedImages, $imagePaths);
 
-            // Update or create variants
+            // Update or create variants, tracking each row's actual id (new variants
+            // won't have one in the request payload until after they're created)
+            $persistedVariantIds = [];
             foreach ($request->input('variants', []) as $variantData) {
                 $parentImageIndex = $variantData['parent_image_index'] ?? null;
                 $variantImage = $parentImageIndex !== null && isset($combinedImages[$parentImageIndex])
                     ? $combinedImages[$parentImageIndex]
                     : null;
 
-                Variant::updateOrCreate(
+                $variant = Variant::updateOrCreate(
                     ['id' => $variantData['id'] ?? null, 'product_id' => $product->id],
                     [
                         'sku' => Str::upper($product->slug . '-' . Str::random(6)),
                         'size' => $variantData['size'] ?? null,
                         'color' => $variantData['color'] ?? null,
                         'image' => $variantImage,
+                        'is_featured' => (bool) ($variantData['is_featured'] ?? false),
                         'is_exclusive' => (bool) ($variantData['is_exclusive'] ?? false),
                         'is_new_arrival' => (bool) ($variantData['is_new_arrival'] ?? false),
                     ]
-                );  
+                );
+
+                $persistedVariantIds[] = $variant->id;
             }
+
+            // Remove variants that were dropped on the frontend (not present in the payload)
+            Variant::where('product_id', $product->id)
+                ->whereNotIn('id', $persistedVariantIds)
+                ->delete();
         });
+
+        return redirect()->route('admin.products')->with('status', 'Product updated successfully!');
     }
 
     public function destroy($id)
@@ -209,5 +225,23 @@ class AdminProductsController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products')->with('status', 'Product deleted successfully!');
+    }
+
+    /**
+     * Rejects variants sharing the same color+size combination (color/size alone need not be unique).
+     */
+    protected function uniqueVariantComboRule(): \Closure
+    {
+        return function ($attribute, $value, $fail) {
+            $seen = [];
+            foreach ($value as $variant) {
+                $combo = mb_strtolower(trim($variant['color'] ?? '')) . '|' . mb_strtolower(trim($variant['size'] ?? ''));
+                if (isset($seen[$combo])) {
+                    $fail('Each variant must have a unique color and size combination.');
+                    return;
+                }
+                $seen[$combo] = true;
+            }
+        };
     }
 }

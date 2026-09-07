@@ -13,7 +13,7 @@ export default function MiniCart() {
             <h2 className="mb-4 text-xl font-bold">Your Cart</h2>
             {cart.map((item) => (
                 <div
-                    key={item.id}
+                    key={`${item.id}-${item.variantId ?? 'default'}`}
                     className="mb-3 flex items-center justify-between"
                 >
                     <div>
@@ -24,14 +24,18 @@ export default function MiniCart() {
                     </div>
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() => updateQuantity(item.id, -1)}
+                            onClick={() =>
+                                updateQuantity(item.id, -1, item.variantId)
+                            }
                             className="rounded bg-gray-200 px-2"
                         >
                             -
                         </button>
                         <span>{item.quantity}</span>
                         <button
-                            onClick={() => updateQuantity(item.id, 1)}
+                            onClick={() =>
+                                updateQuantity(item.id, 1, item.variantId)
+                            }
                             className="rounded bg-gray-200 px-2"
                         >
                             +

@@ -32,4 +32,14 @@ class Product extends Model
     {
         return $this->hasMany(Variant::class);
     }
+
+    /**
+     * Scope a query to products having at least one featured variant.
+     */
+    public function scopeHasFeaturedVariant($query)
+    {
+        return $query->whereHas('variants', function ($query) {
+            $query->where('is_featured', true);
+        });
+    }
 }

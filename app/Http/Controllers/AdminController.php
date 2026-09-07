@@ -5,13 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
     public function index()
     {
+        $productCount = Product::count();
+        $orderCount = Order::count();
+
         return inertia('Admin/Pages/Dashboard', [
-            'status' => session('status')
+            'status' => session('status'),
+            'productCount' => $productCount,
+            'orderCount' => $orderCount
         ]);
     }
 

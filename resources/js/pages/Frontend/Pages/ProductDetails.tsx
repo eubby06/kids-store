@@ -13,24 +13,67 @@ interface Props {
 export default function ProductDetails({ product, variants, images }: Props) {
     const { addToCart } = useCart();
 
-    const sizes = variants.map((variant) => {
-        return {
-            value: variant.size,
-            disabled: variant.stock_count === 0,
-        };
-    });
-
-    const colors = variants.map((variant) => {
-        return {
-            name: variant.color,
-            class: `bg-${variant.color.toLowerCase()}-500 border-gray-300`,
-            value: variant.color.toLowerCase(),
-        };
-    });
+    const colors = Array.from(
+        new Map(
+            variants.map((variant) => [
+                variant.color.toLowerCase(),
+                { name: variant.color, value: variant.color.toLowerCase() },
+            ]),
+        ).values(),
+    );
 
     const [selectedColor, setSelectedColor] = useState(colors[0]);
     const [selectedSize, setSelectedSize] = useState('L');
     const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+    // Sizes are scoped to the selected color so unavailable size/color combos aren't shown at all
+    const sizes = Array.from(
+        variants
+            .filter(
+                (variant) =>
+                    variant.color.toLowerCase() === selectedColor?.value,
+            )
+            .reduce((sizeMap, variant) => {
+                const inStock = variant.stock_count !== 0;
+                const existing = sizeMap.get(variant.size);
+                // Prefer marking a size as available if any matching variant has stock
+                if (!existing || (existing.disabled && inStock)) {
+                    sizeMap.set(variant.size, {
+                        value: variant.size,
+                        disabled: !inStock,
+                    });
+                }
+                return sizeMap;
+            }, new Map<string, { value: string; disabled: boolean }>())
+            .values(),
+    );
+
+    const handleColorSelect = (color: (typeof colors)[number]) => {
+        setSelectedColor(color);
+
+        const availableSizes = variants
+            .filter((variant) => variant.color.toLowerCase() === color.value)
+            .map((variant) => variant.size);
+
+        if (!availableSizes.includes(selectedSize)) {
+            setSelectedSize(availableSizes[0] ?? '');
+        }
+    };
+
+    // Prefer the exact color+size match, falling back to any variant sharing the selected color
+    const selectedVariant =
+        variants.find(
+            (variant) =>
+                variant.color.toLowerCase() === selectedColor?.value &&
+                variant.size === selectedSize,
+        ) ??
+        variants.find(
+            (variant) => variant.color.toLowerCase() === selectedColor?.value,
+        );
+
+    const mainImage = selectedVariant?.image
+        ? selectedVariant.image
+        : product.images[0];
 
     return (
         <Wrapper>
@@ -59,7 +102,7 @@ export default function ProductDetails({ product, variants, images }: Props) {
                     <div className="space-y-4">
                         <div className="aspect-square w-full overflow-hidden rounded-2xl bg-gray-100">
                             <img
-                                src={`/storage/${product.images[0]}`}
+                                src={`/storage/${mainImage}`}
                                 alt={`${product.name} view`}
                                 className="h-full w-full object-cover object-center transition-all duration-500"
                             />
@@ -137,9 +180,12 @@ export default function ProductDetails({ product, variants, images }: Props) {
                                         <button
                                             key={color.value}
                                             onClick={() =>
-                                                setSelectedColor(color)
+                                                handleColorSelect(color)
                                             }
-                                            className={`h-8 w-8 rounded-full border transition-all focus:outline-none ${color.class} ${
+                                            style={{
+                                                backgroundColor: color.value,
+                                            }}
+                                            className={`h-8 w-8 rounded-full border border-gray-300 transition-all focus:outline-none ${
                                                 selectedColor.value ===
                                                 color.value
                                                     ? 'scale-105 ring-2 ring-black ring-offset-2'
@@ -191,7 +237,9 @@ export default function ProductDetails({ product, variants, images }: Props) {
                         {/* Actions */}
                         <div className="mt-8 space-y-3">
                             <button
-                                onClick={() => addToCart(product)}
+                                onClick={() =>
+                                    addToCart(product, selectedVariant)
+                                }
                                 className="flex w-full items-center justify-center rounded-xl bg-black px-8 py-4 text-center text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none"
                             >
                                 Add to Cart

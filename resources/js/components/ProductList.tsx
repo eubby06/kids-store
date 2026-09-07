@@ -25,11 +25,19 @@ export default function ProductList({ products = [] }: ProductListProps) {
                             {/* Image Wrapper */}
                             <div className="aspect-h-1 aspect-w-1 lg:aspect-none h-56 w-full overflow-hidden rounded-xl bg-slate-100 transition group-hover:opacity-90">
                                 <Link href={`/products/${product.slug}`}>
-                                    <img
-                                        src={`/storage/${product.images[0]}`}
-                                        alt={product.name}
-                                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                                    />
+                                    {product.variants ? (
+                                        <img
+                                            src={`/storage/${product.variants[0]?.image}`}
+                                            alt={product.name}
+                                            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={`/storage/${product.images[0]}`}
+                                            alt={product.name}
+                                            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                        />
+                                    )}
                                 </Link>
                             </div>
 

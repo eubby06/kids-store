@@ -9,6 +9,7 @@ interface VariantForm {
     id?: number;
     size: string;
     color: string;
+    is_featured: boolean;
     is_exclusive: boolean;
     is_new_arrival: boolean;
     parent_image_index: number | null;
@@ -37,6 +38,7 @@ const createEmptyVariant = (): VariantForm => ({
     key: createVariantKey(),
     size: '',
     color: '',
+    is_featured: false,
     is_exclusive: false,
     is_new_arrival: false,
     parent_image_index: null,
@@ -71,6 +73,7 @@ export default function AdminProductCreatePage({
                 id: variant.id,
                 size: variant.size,
                 color: variant.color,
+                is_featured: variant.is_featured,
                 is_exclusive: variant.is_exclusive,
                 is_new_arrival: variant.is_new_arrival,
                 parent_image_index: variant.parent_image_index,
@@ -491,6 +494,22 @@ export default function AdminProductCreatePage({
                                     </div>
 
                                     <div className="mt-4 flex flex-wrap gap-6">
+                                        <label className="flex items-center gap-2 text-sm text-slate-700">
+                                            <input
+                                                type="checkbox"
+                                                checked={variant.is_featured}
+                                                onChange={(e) =>
+                                                    updateVariant(
+                                                        variant.key,
+                                                        'is_featured',
+                                                        e.target.checked,
+                                                    )
+                                                }
+                                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            Featured
+                                        </label>
+
                                         <label className="flex items-center gap-2 text-sm text-slate-700">
                                             <input
                                                 type="checkbox"

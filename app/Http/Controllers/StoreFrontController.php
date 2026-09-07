@@ -10,12 +10,14 @@ class StoreFrontController extends Controller
 {
     public function index()
     {
-        $products = Product::where('is_featured', true)->get();
         $categories = Category::all();
+        $featuredProducts = Product::with(['variants' => function ($query) {
+            $query->where('is_featured', true);
+        }])->hasFeaturedVariant()->get();
 
         return inertia('Frontend/Pages/StoreFront', [
             'status' => session('status'),
-            'products' => $products,
+            'products' => $featuredProducts,
             'categories' => $categories,
         ]);
     }

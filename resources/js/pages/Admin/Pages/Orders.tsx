@@ -1,31 +1,18 @@
 import { Head, Link } from '@inertiajs/react';
 import Layout from './Layout';
+import { Order } from '@/types/order';
 
-const orders = [
-    {
-        id: '#1001',
-        customer: 'Alicia Brown',
-        total: 128.9,
-        status: 'Paid',
-        date: '2026-08-18',
-    },
-    {
-        id: '#1002',
-        customer: 'Marcus Lee',
-        total: 72.4,
-        status: 'Processing',
-        date: '2026-08-19',
-    },
-    {
-        id: '#1003',
-        customer: 'Jasmine Patel',
-        total: 210.15,
-        status: 'Shipped',
-        date: '2026-08-20',
-    },
-];
+export default function AdminOrdersPage({ orders }: { orders: Order[] }) {
+    const shippedCount = orders.filter(
+        (order) => order.status === 'shipped',
+    ).length;
+    const processingCount = orders.filter(
+        (order) => order.status === 'processing',
+    ).length;
+    const cancelledCount = orders.filter(
+        (order) => order.status === 'cancelled',
+    ).length;
 
-export default function AdminOrdersPage() {
     return (
         <Layout title="Orders">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -50,23 +37,23 @@ export default function AdminOrdersPage() {
                             Total Orders
                         </p>
                         <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
-                            512
-                        </p>
-                    </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Paid
-                        </p>
-                        <p className="mt-2 text-3xl font-bold text-emerald-600">
-                            341
+                            {orders.length}
                         </p>
                     </div>
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             Processing
                         </p>
+                        <p className="mt-2 text-3xl font-bold text-emerald-600">
+                            {processingCount}
+                        </p>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Cancelled
+                        </p>
                         <p className="mt-2 text-3xl font-bold text-amber-600">
-                            88
+                            {cancelledCount}
                         </p>
                     </div>
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -74,7 +61,7 @@ export default function AdminOrdersPage() {
                             Shipped
                         </p>
                         <p className="mt-2 text-3xl font-bold text-sky-600">
-                            83
+                            {shippedCount}
                         </p>
                     </div>
                 </div>
@@ -119,19 +106,21 @@ export default function AdminOrdersPage() {
                                         {order.id}
                                     </td>
                                     <td className="px-5 py-4">
-                                        {order.customer}
+                                        {order.customer_email}
                                     </td>
-                                    <td className="px-5 py-4">{order.date}</td>
                                     <td className="px-5 py-4">
-                                        ${order.total.toFixed(2)}
+                                        {order.created_at}
+                                    </td>
+                                    <td className="px-5 py-4">
+                                        ${order.total_amount.toFixed(2)}
                                     </td>
                                     <td className="px-5 py-4">
                                         <span
                                             className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
-                                                order.status === 'Paid'
+                                                order.status === 'shipped'
                                                     ? 'bg-emerald-100 text-emerald-700'
                                                     : order.status ===
-                                                        'Processing'
+                                                        'processing'
                                                       ? 'bg-amber-100 text-amber-700'
                                                       : 'bg-sky-100 text-sky-700'
                                             }`}

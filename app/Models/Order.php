@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\OrderStatus;
 
 class Order extends Model
 {
+    protected $casts = [
+        'status' => OrderStatus::class,
+    ];
+
     protected $fillable = [
         'user_id',
         'stripe_payment_intent_id',

@@ -103,13 +103,13 @@ function CartPageContent() {
                                     {cart && cart.length > 0
                                         ? cart.map((item) => (
                                               <li
-                                                  key={item.id}
+                                                  key={`${item.id}-${item.variantId ?? 'default'}`}
                                                   className="flex py-6 first:pt-0 last:pb-0"
                                               >
                                                   {/* Product Thumbnail */}
                                                   <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-100">
                                                       <img
-                                                          src={item.images}
+                                                          src={`/storage/${item.variantImage ?? item.images?.[0]}`}
                                                           alt={item.name}
                                                           className="h-full w-full object-cover object-center"
                                                       />
@@ -133,6 +133,23 @@ function CartPageContent() {
                                                                       item.description
                                                                   }
                                                               </p>
+                                                              {(item.variantColor ||
+                                                                  item.variantSize) && (
+                                                                  <p className="mt-1 text-xs text-gray-400">
+                                                                      {[
+                                                                          item.variantColor &&
+                                                                              `Color: ${item.variantColor}`,
+                                                                          item.variantSize &&
+                                                                              `Size: ${item.variantSize}`,
+                                                                      ]
+                                                                          .filter(
+                                                                              Boolean,
+                                                                          )
+                                                                          .join(
+                                                                              ' · ',
+                                                                          )}
+                                                                  </p>
+                                                              )}
                                                           </div>
                                                           <p className="ml-4 text-base font-semibold text-gray-900">
                                                               $
@@ -151,6 +168,7 @@ function CartPageContent() {
                                                                       updateQuantity(
                                                                           item.id,
                                                                           -1,
+                                                                          item.variantId,
                                                                       )
                                                                   }
                                                                   className="px-3 py-1 font-medium text-gray-600 transition-colors hover:text-black"
@@ -168,6 +186,7 @@ function CartPageContent() {
                                                                       updateQuantity(
                                                                           item.id,
                                                                           1,
+                                                                          item.variantId,
                                                                       )
                                                                   }
                                                                   className="px-3 py-1 font-medium text-gray-600 transition-colors hover:text-black"
@@ -181,6 +200,7 @@ function CartPageContent() {
                                                               onClick={() =>
                                                                   removeFromCart(
                                                                       item.id,
+                                                                      item.variantId,
                                                                   )
                                                               }
                                                               className="flex items-center text-sm font-medium text-red-600 transition-colors hover:text-red-500"

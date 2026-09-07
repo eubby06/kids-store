@@ -7,7 +7,7 @@ import React, {
     ReactNode,
 } from 'react';
 import { CartItem, CartContextType } from '@/types';
-import { Product } from '@/types/product';
+import { Product, Variant } from '@/types/product';
 import { toast } from 'react-hot-toast';
 
 // Initialize context with undefined to force safe hook patterns
@@ -38,26 +38,43 @@ export function CartProvider({ children }: CartProviderProps) {
         localStorage.setItem('react_ts_cart', JSON.stringify(cart));
     }, [cart, isHydrated]);
 
-    const addToCart = (product: Product) => {
+    const addToCart = (product: Product, variant?: Variant) => {
         setCart((prevCart) => {
             toast.success(`${product.name} added to cart`);
-            const existing = prevCart.find((item) => item.id === product.id);
+            const existing = prevCart.find(
+                (item) =>
+                    item.id === product.id && item.variantId === variant?.id,
+            );
             if (existing) {
                 return prevCart.map((item) =>
-                    item.id === product.id
+                    item === existing
                         ? { ...item, quantity: item.quantity + 1 }
                         : item,
                 );
             }
-            return [...prevCart, { ...product, quantity: 1 }];
+            return [
+                ...prevCart,
+                {
+                    ...product,
+                    quantity: 1,
+                    variantId: variant?.id,
+                    variantImage: variant?.image,
+                    variantColor: variant?.color,
+                    variantSize: variant?.size,
+                },
+            ];
         });
     };
 
-    const updateQuantity = (id: number, delta: number) => {
+    const updateQuantity = (
+        id: number,
+        delta: number,
+        variantId?: number,
+    ) => {
         setCart((prevCart) =>
             prevCart
                 .map((item) =>
-                    item.id === id
+                    item.id === id && item.variantId === variantId
                         ? { ...item, quantity: item.quantity + delta }
                         : item,
                 )
@@ -66,8 +83,12 @@ export function CartProvider({ children }: CartProviderProps) {
     };
 
     // 🌟 New: Removes a single item entirely from the state array
-    const removeFromCart = (id: number) => {
-        setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+    const removeFromCart = (id: number, variantId?: number) => {
+        setCart((prevCart) =>
+            prevCart.filter(
+                (item) => !(item.id === id && item.variantId === variantId),
+            ),
+        );
     };
 
     // Inside your CartContext.tsx

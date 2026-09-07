@@ -1,24 +1,30 @@
 import { Head, Link } from '@inertiajs/react';
 import Layout from './Layout';
 
-const stats = [
-    {
-        label: 'Total Products',
-        value: 128,
-        accent: 'text-slate-900 dark:text-white',
-    },
-    {
-        label: 'Total Orders',
-        value: 512,
-        accent: 'text-slate-900 dark:text-white',
-    },
-    { label: 'New Orders', value: 24, accent: 'text-emerald-600' },
-    { label: 'New Messages', value: 9, accent: 'text-sky-600' },
-    { label: 'Canceled Orders', value: 7, accent: 'text-red-600' },
-    { label: 'Out of Stock Products', value: 5, accent: 'text-amber-600' },
-];
+export default function AdminDashboard({
+    productCount,
+    orderCount,
+}: {
+    productCount: number;
+    orderCount: number;
+}) {
+    const stats = [
+        {
+            label: 'Total Products',
+            value: productCount,
+            accent: 'text-slate-900 dark:text-white',
+        },
+        {
+            label: 'Total Orders',
+            value: orderCount,
+            accent: 'text-slate-900 dark:text-white',
+        },
+        { label: 'New Orders', value: 24, accent: 'text-emerald-600' },
+        { label: 'New Messages', value: 9, accent: 'text-sky-600' },
+        { label: 'Canceled Orders', value: 7, accent: 'text-red-600' },
+        { label: 'Out of Stock Products', value: 5, accent: 'text-amber-600' },
+    ];
 
-export default function AdminDashboard() {
     return (
         <Layout title="Admin Dashboard">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

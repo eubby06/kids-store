@@ -17,6 +17,7 @@ class Variant extends Model
         'image',
         'stock_count',
         'price_override',
+        'is_featured',
         'is_on_sale',
         'is_exclusive',
         'is_new_arrival',
