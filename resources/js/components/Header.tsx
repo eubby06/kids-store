@@ -7,9 +7,9 @@ export default function Header() {
                 {/* Background Design Accents */}
                 <div className="absolute inset-0 z-10 bg-linear-to-r from-black/90 to-black/40" />
                 <img
-                    src="https://unsplash.com"
+                    src="/images/banner.jpg"
                     alt="Storefront Hero"
-                    className="absolute inset-0 h-full w-full scale-105 transform object-cover object-center grayscale"
+                    className="absolute inset-0 h-full w-full scale-105 transform object-cover object-center"
                 />
 
                 {/* Content Overlays */}
@@ -18,7 +18,9 @@ export default function Header() {
                         Hand-Finished Batch #04
                     </span>
                     <h1 className="text-4xl font-black tracking-tight uppercase sm:text-5xl lg:text-6xl">
-                        Faded. Distressed.
+                        <span className="whitespace-nowrap">
+                            Faded. Distressed.
+                        </span>
                         <br />
                         Unapologetic.{' '}
                         <span className="text-neutral-500">Neutral-600</span>
