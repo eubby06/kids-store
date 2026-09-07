@@ -16,7 +16,11 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+        <div className="min-h-screen bg-neutral-950 font-sans text-white">
+            {/* Announcement Bar */}
+            <div className="bg-lime-400 py-2 text-center text-xs font-bold tracking-wider text-black uppercase">
+                Free shipping on domestic orders over $75 — Drop #04 live now
+            </div>
             {/* Navigation */}
             <Navigation
                 onSearch={handleSearchSubmit}

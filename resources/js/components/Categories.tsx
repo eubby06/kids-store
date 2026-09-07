@@ -4,13 +4,13 @@ import { CategoriesProps } from '@/types/category';
 export default function Categories({ categories = [] }: CategoriesProps) {
     return (
         <section className="mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-                <h2 className="text-xl font-bold tracking-tight text-slate-900">
-                    Shop by Workspace Category
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
+                <h2 className="text-xl font-bold tracking-tight text-white uppercase">
+                    Shop by Category
                 </h2>
                 <Link
                     href="#"
-                    className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+                    className="text-sm font-semibold text-lime-400 hover:text-lime-300"
                 >
                     View all →
                 </Link>
@@ -20,9 +20,9 @@ export default function Categories({ categories = [] }: CategoriesProps) {
                     <Link
                         key={idx}
                         href={`/products?category=${cat.slug}`}
-                        className="group relative flex h-24 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-indigo-500/40 hover:shadow-md"
+                        className="group relative flex h-24 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-sm transition hover:border-lime-400/50 hover:shadow-md"
                     >
-                        <span className="text-sm font-semibold text-slate-800 transition group-hover:text-indigo-600 sm:text-base">
+                        <span className="text-sm font-semibold tracking-wide text-neutral-300 uppercase transition group-hover:text-lime-400 sm:text-base">
                             {cat.name}
                         </span>
                     </Link>

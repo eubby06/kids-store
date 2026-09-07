@@ -16,20 +16,20 @@ export default function Register() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 sm:px-6 lg:px-8">
+        <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 sm:px-6 lg:px-8">
             <Head title="Create Account" />
 
-            <div className="w-full max-w-md space-y-8 rounded-2xl border border-slate-100 bg-white p-8 shadow-sm">
+            <div className="w-full max-w-md space-y-8 rounded-2xl border border-neutral-800 bg-neutral-900 p-8 shadow-sm">
                 {/* Header */}
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+                    <h2 className="text-3xl font-extrabold tracking-tight text-white uppercase">
                         Create an account
                     </h2>
-                    <p className="mt-2 text-sm text-slate-500">
+                    <p className="mt-2 text-sm text-neutral-400">
                         Already have an account?{' '}
                         <Link
                             href="/login"
-                            className="font-medium text-indigo-600 transition hover:text-indigo-500"
+                            className="font-medium text-lime-400 transition hover:text-lime-300"
                         >
                             Sign in
                         </Link>
@@ -41,7 +41,7 @@ export default function Register() {
                     <div>
                         <label
                             htmlFor="name"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-neutral-300"
                         >
                             Full Name
                         </label>
@@ -50,16 +50,16 @@ export default function Register() {
                             type="text"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border bg-neutral-800 px-3 py-2 text-white placeholder-neutral-500 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.name
-                                    ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    ? 'border-red-400 focus:ring-red-500/20'
+                                    : 'border-neutral-700 focus:ring-lime-400/30'
                             }`}
                             placeholder="John Doe"
                             required
                         />
                         {errors.name && (
-                            <p className="mt-1 text-xs text-red-600">
+                            <p className="mt-1 text-xs text-red-400">
                                 {errors.name}
                             </p>
                         )}
@@ -68,7 +68,7 @@ export default function Register() {
                     <div>
                         <label
                             htmlFor="email"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-neutral-300"
                         >
                             Email address
                         </label>
@@ -77,16 +77,16 @@ export default function Register() {
                             type="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border bg-neutral-800 px-3 py-2 text-white placeholder-neutral-500 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.email
-                                    ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    ? 'border-red-400 focus:ring-red-500/20'
+                                    : 'border-neutral-700 focus:ring-lime-400/30'
                             }`}
                             placeholder="you@example.com"
                             required
                         />
                         {errors.email && (
-                            <p className="mt-1 text-xs text-red-600">
+                            <p className="mt-1 text-xs text-red-400">
                                 {errors.email}
                             </p>
                         )}
@@ -95,7 +95,7 @@ export default function Register() {
                     <div>
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-neutral-300"
                         >
                             Password
                         </label>
@@ -106,16 +106,16 @@ export default function Register() {
                             onChange={(e) =>
                                 setData('password', e.target.value)
                             }
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border bg-neutral-800 px-3 py-2 text-white placeholder-neutral-500 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.password
-                                    ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    ? 'border-red-400 focus:ring-red-500/20'
+                                    : 'border-neutral-700 focus:ring-lime-400/30'
                             }`}
                             placeholder="••••••••"
                             required
                         />
                         {errors.password && (
-                            <p className="mt-1 text-xs text-red-600">
+                            <p className="mt-1 text-xs text-red-400">
                                 {errors.password}
                             </p>
                         )}
@@ -124,7 +124,7 @@ export default function Register() {
                     <div>
                         <label
                             htmlFor="password_confirmation"
-                            className="block text-sm font-medium text-slate-700"
+                            className="block text-sm font-medium text-neutral-300"
                         >
                             Confirm Password
                         </label>
@@ -135,16 +135,16 @@ export default function Register() {
                             onChange={(e) =>
                                 setData('password_confirmation', e.target.value)
                             }
-                            className={`mt-1 block w-full rounded-lg border px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:outline-none sm:text-sm ${
+                            className={`mt-1 block w-full rounded-lg border bg-neutral-800 px-3 py-2 text-white placeholder-neutral-500 transition focus:ring-2 focus:outline-none sm:text-sm ${
                                 errors.password_confirmation
-                                    ? 'border-red-300 focus:ring-red-500/20'
-                                    : 'border-slate-200 focus:ring-indigo-500/20'
+                                    ? 'border-red-400 focus:ring-red-500/20'
+                                    : 'border-neutral-700 focus:ring-lime-400/30'
                             }`}
                             placeholder="••••••••"
                             required
                         />
                         {errors.password_confirmation && (
-                            <p className="mt-1 text-xs text-red-600">
+                            <p className="mt-1 text-xs text-red-400">
                                 {errors.password_confirmation}
                             </p>
                         )}
@@ -153,7 +153,7 @@ export default function Register() {
                     <button
                         type="submit"
                         disabled={processing}
-                        className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 disabled:opacity-50"
+                        className="w-full rounded-lg bg-lime-400 px-4 py-2.5 text-sm font-bold text-black uppercase shadow-sm transition hover:bg-lime-300 disabled:opacity-50"
                     >
                         {processing ? 'Creating account...' : 'Create Account'}
                     </button>

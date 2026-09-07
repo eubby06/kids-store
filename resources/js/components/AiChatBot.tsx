@@ -77,17 +77,17 @@ export default function AiChatBot(): React.JSX.Element {
     };
 
     return (
-        <div className="fixed right-6 bottom-6 z-50 font-sans text-gray-800">
+        <div className="fixed right-6 bottom-6 z-50 font-sans text-white">
             {/* Floating Toggle Button Bubble */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex transform items-center justify-center rounded-full bg-indigo-600 p-4 text-white shadow-2xl transition-all duration-200 hover:scale-105 hover:bg-indigo-700"
+                className="flex transform items-center justify-center rounded-full bg-lime-400 p-4 font-bold text-black shadow-2xl transition-all duration-200 hover:scale-105 hover:bg-lime-300"
                 type="button"
             >
                 {isOpen ? (
                     <span className="text-xl font-bold">✕</span>
                 ) : (
-                    <div className="flex items-center gap-2 px-2 font-medium">
+                    <div className="flex items-center gap-2 px-2 font-medium uppercase">
                         <span>💬</span> Ask AI Assistant
                     </div>
                 )}
@@ -95,22 +95,22 @@ export default function AiChatBot(): React.JSX.Element {
 
             {/* Primary Chat Frame */}
             {isOpen && (
-                <div className="absolute right-0 bottom-20 flex h-112 w-80 flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl transition-all duration-300 sm:w-85">
+                <div className="absolute right-0 bottom-20 flex h-112 w-80 flex-col overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl transition-all duration-300 sm:w-85">
                     {/* Header Branding */}
-                    <div className="flex items-center justify-between bg-gradient-to-r from-indigo-600 to-indigo-700 p-4 text-white shadow-md">
+                    <div className="flex items-center justify-between bg-black p-4 text-white shadow-md">
                         <div>
-                            <h3 className="text-base leading-tight font-bold">
+                            <h3 className="text-base leading-tight font-bold uppercase">
                                 Peeble & Pine
                             </h3>
-                            <p className="flex items-center gap-1 text-xs text-indigo-200">
-                                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400"></span>{' '}
+                            <p className="flex items-center gap-1 text-xs text-lime-400">
+                                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-400"></span>{' '}
                                 AI Shopping Guide
                             </p>
                         </div>
                     </div>
 
                     {/* Chat Messages Feed Body */}
-                    <div className="max-h-[340px] flex-1 space-y-3 overflow-y-auto bg-gray-50 p-4">
+                    <div className="max-h-[340px] flex-1 space-y-3 overflow-y-auto bg-neutral-950 p-4">
                         {messages.map((msg, index) => (
                             <div
                                 key={index}
@@ -119,8 +119,8 @@ export default function AiChatBot(): React.JSX.Element {
                                 <div
                                     className={`max-w-[85%] rounded-2xl p-3 text-sm whitespace-pre-line shadow-sm ${
                                         msg.role === 'user'
-                                            ? 'rounded-tr-none bg-indigo-600 text-white'
-                                            : 'rounded-tl-none border border-gray-200 bg-white text-gray-800'
+                                            ? 'rounded-tr-none bg-lime-400 text-black'
+                                            : 'rounded-tl-none border border-neutral-800 bg-neutral-900 text-neutral-200'
                                     }`}
                                 >
                                     {msg.text}
@@ -131,13 +131,13 @@ export default function AiChatBot(): React.JSX.Element {
                         {/* Thinking/Searching Context Loading state animation */}
                         {loading && (
                             <div className="flex justify-start">
-                                <div className="flex items-center gap-2 rounded-2xl rounded-tl-none border border-gray-200 bg-white p-3 shadow-sm">
+                                <div className="flex items-center gap-2 rounded-2xl rounded-tl-none border border-neutral-800 bg-neutral-900 p-3 shadow-sm">
                                     <div className="flex gap-1">
-                                        <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-500 [animation-delay:-0.3s]"></span>
-                                        <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-500 [animation-delay:-0.15s]"></span>
-                                        <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-500"></span>
+                                        <span className="h-2 w-2 animate-bounce rounded-full bg-lime-400 [animation-delay:-0.3s]"></span>
+                                        <span className="h-2 w-2 animate-bounce rounded-full bg-lime-400 [animation-delay:-0.15s]"></span>
+                                        <span className="h-2 w-2 animate-bounce rounded-full bg-lime-400"></span>
                                     </div>
-                                    <span className="text-xs font-medium text-gray-400">
+                                    <span className="text-xs font-medium text-neutral-500">
                                         Checking catalog...
                                     </span>
                                 </div>
@@ -149,7 +149,7 @@ export default function AiChatBot(): React.JSX.Element {
                     {/* Chat Input Text Box Form */}
                     <form
                         onSubmit={handleSendMessage}
-                        className="flex items-center gap-2 border-t border-gray-100 bg-white p-3"
+                        className="flex items-center gap-2 border-t border-neutral-800 bg-neutral-900 p-3"
                     >
                         <input
                             type="text"
@@ -158,12 +158,12 @@ export default function AiChatBot(): React.JSX.Element {
                                 e: React.ChangeEvent<HTMLInputElement>,
                             ) => setInput(e.target.value)}
                             placeholder="Ask about materials, dimensions, price..."
-                            className="flex-1 rounded-xl border border-gray-300 px-3 py-2.5 text-sm transition focus:border-transparent focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                            className="flex-1 rounded-xl border border-neutral-700 bg-neutral-800 px-3 py-2.5 text-sm text-white placeholder-neutral-500 transition focus:border-transparent focus:ring-2 focus:ring-lime-400 focus:outline-none"
                             disabled={loading}
                         />
                         <button
                             type="submit"
-                            className="rounded-xl bg-indigo-600 p-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:opacity-50"
+                            className="rounded-xl bg-lime-400 p-2.5 text-sm font-bold text-black transition hover:bg-lime-300 disabled:opacity-50"
                             disabled={loading || !input.trim()}
                         >
                             Send

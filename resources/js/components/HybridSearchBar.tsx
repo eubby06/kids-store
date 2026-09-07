@@ -83,7 +83,7 @@ export default function HybridSearchBar(): React.JSX.Element {
     return (
         <div
             ref={dropdownRef}
-            className="relative mx-auto w-full max-w-xl font-sans text-gray-800"
+            className="relative mx-auto w-full max-w-xl font-sans text-white"
         >
             {/* Input Box Wrapper */}
             <div className="relative flex items-center">
@@ -93,34 +93,34 @@ export default function HybridSearchBar(): React.JSX.Element {
                     onChange={handleInputChange}
                     onFocus={() => query.trim() && setIsOpen(true)}
                     placeholder="Search products semantically (e.g., 'warm clothing for rain')..."
-                    className="w-full rounded-xl border border-gray-300 bg-white py-2.5 pr-10 pl-4 text-sm shadow-sm transition focus:border-transparent focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    className="w-full rounded-xl border border-neutral-700 bg-neutral-900 py-2.5 pr-10 pl-4 text-sm text-white placeholder-neutral-500 shadow-sm transition focus:border-transparent focus:ring-2 focus:ring-lime-400 focus:outline-none"
                 />
 
                 {/* Status Indicator */}
                 <div className="absolute right-3 flex items-center">
                     {loading ? (
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-lime-400 border-t-transparent"></div>
                     ) : (
-                        <span className="text-sm text-gray-400">🔍</span>
+                        <span className="text-sm text-neutral-500">🔍</span>
                     )}
                 </div>
             </div>
 
             {/* Absolute Dropdown Panel */}
             {isOpen && results.length > 0 && (
-                <div className="absolute top-full left-0 z-50 mt-2 max-h-96 w-full overflow-hidden overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-2xl">
-                    <div className="border-b border-gray-100 bg-gray-50 px-4 py-2 text-xs font-semibold tracking-wider text-gray-400">
+                <div className="absolute top-full left-0 z-50 mt-2 max-h-96 w-full overflow-hidden overflow-y-auto rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
+                    <div className="border-b border-neutral-800 bg-neutral-950 px-4 py-2 text-xs font-semibold tracking-wider text-neutral-500">
                         🤖 AI Hybrid Search Results
                     </div>
 
-                    <div className="divide-y divide-gray-100">
+                    <div className="divide-y divide-neutral-800">
                         {results.map((product) => (
                             <a
                                 key={product.id}
                                 href={`/products/${product.slug || product.id}`}
-                                className="group block flex items-center gap-4 p-3 transition-colors hover:bg-indigo-50/50"
+                                className="group block flex items-center gap-4 p-3 transition-colors hover:bg-neutral-800"
                             >
-                                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
+                                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-neutral-700 bg-neutral-800">
                                     {product.image_url ? (
                                         <img
                                             src={product.image_url}
@@ -128,23 +128,23 @@ export default function HybridSearchBar(): React.JSX.Element {
                                             className="h-full w-full object-cover"
                                         />
                                     ) : (
-                                        <span className="text-xs text-gray-400">
+                                        <span className="text-xs text-neutral-500">
                                             📦
                                         </span>
                                     )}
                                 </div>
 
                                 <div className="min-w-0 flex-1">
-                                    <h4 className="truncate text-sm font-semibold text-gray-900 transition-colors group-hover:text-indigo-600">
+                                    <h4 className="truncate text-sm font-semibold text-white transition-colors group-hover:text-lime-400">
                                         {product.name}
                                     </h4>
-                                    <p className="mt-0.5 truncate text-xs text-gray-500">
+                                    <p className="mt-0.5 truncate text-xs text-neutral-500">
                                         {product.description}
                                     </p>
                                 </div>
 
                                 <div className="flex-shrink-0 text-right">
-                                    <span className="text-sm font-bold text-gray-900">
+                                    <span className="text-sm font-bold text-white">
                                         ${Number(product.price).toFixed(2)}
                                     </span>
                                 </div>
@@ -156,7 +156,7 @@ export default function HybridSearchBar(): React.JSX.Element {
 
             {/* Zero State Alert */}
             {isOpen && query.trim() && results.length === 0 && !loading && (
-                <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-xl border border-gray-100 bg-white p-4 text-center text-sm text-gray-500 shadow-2xl">
+                <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-xl border border-neutral-800 bg-neutral-900 p-4 text-center text-sm text-neutral-500 shadow-2xl">
                     No items found matching your description. Try an alternative
                     query keyword!
                 </div>

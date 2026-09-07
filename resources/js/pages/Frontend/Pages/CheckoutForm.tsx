@@ -82,7 +82,7 @@ export default function CheckoutForm({ shippingData }: CheckoutFormProps) {
 
             {/* Error Message Box */}
             {errorMessage && (
-                <div className="rounded bg-red-50 p-3 text-sm font-medium text-red-600 dark:bg-red-950/30 dark:text-red-400">
+                <div className="rounded bg-red-950/30 p-3 text-sm font-medium text-red-400">
                     {errorMessage}
                 </div>
             )}
@@ -91,7 +91,7 @@ export default function CheckoutForm({ shippingData }: CheckoutFormProps) {
             <button
                 type="submit"
                 disabled={isProcessing || !stripe || !elements}
-                className="w-full rounded bg-indigo-600 py-3 text-base font-semibold text-white transition-all hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+                className="w-full rounded bg-lime-400 py-3 text-base font-bold text-black uppercase transition-all hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
                 {isProcessing ? (
                     <span className="flex items-center justify-center gap-2">

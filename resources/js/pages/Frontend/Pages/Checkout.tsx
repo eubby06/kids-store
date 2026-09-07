@@ -86,11 +86,11 @@ function CheckoutPage({
     const isReadyForPayment = stripePromise && clientSecret && cartTotal > 0;
 
     return (
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 bg-white p-6 md:grid-cols-3 dark:bg-slate-950">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 bg-neutral-950 p-6 md:grid-cols-3">
             <div className="space-y-6 md:col-span-2">
                 {/* Shipping Form Panel */}
-                <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                    <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-6 shadow-sm">
+                    <h2 className="mb-4 text-xl font-bold text-white uppercase">
                         1. Shipping Information
                     </h2>
                     <div className="grid grid-cols-1 gap-4">
@@ -99,14 +99,14 @@ function CheckoutPage({
                             name="name"
                             placeholder="Full Name"
                             onChange={handleInputChange}
-                            className="rounded border border-slate-300 bg-white p-2 text-gray-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                            className="rounded border border-neutral-700 bg-neutral-800 p-2 text-white placeholder-neutral-500"
                         />
                         <input
                             type="text"
                             name="address"
                             placeholder="Street Address"
                             onChange={handleInputChange}
-                            className="rounded border border-slate-300 bg-white p-2 text-gray-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                            className="rounded border border-neutral-700 bg-neutral-800 p-2 text-white placeholder-neutral-500"
                         />
                         <div className="grid grid-cols-2 gap-4">
                             <input
@@ -114,22 +114,22 @@ function CheckoutPage({
                                 name="city"
                                 placeholder="City"
                                 onChange={handleInputChange}
-                                className="rounded border border-slate-300 bg-white p-2 text-gray-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                className="rounded border border-neutral-700 bg-neutral-800 p-2 text-white placeholder-neutral-500"
                             />
                             <input
                                 type="text"
                                 name="zip"
                                 placeholder="ZIP / Postal Code"
                                 onChange={handleInputChange}
-                                className="rounded border border-slate-300 bg-white p-2 text-gray-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                className="rounded border border-neutral-700 bg-neutral-800 p-2 text-white placeholder-neutral-500"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* Secure Payment Panel */}
-                <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                    <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-6 shadow-sm">
+                    <h2 className="mb-4 text-xl font-bold text-white uppercase">
                         2. Payment Details
                     </h2>
                     {isReadyForPayment ? (
@@ -140,9 +140,9 @@ function CheckoutPage({
                             <CheckoutForm shippingData={shippingData} />
                         </Elements>
                     ) : (
-                        <div className="flex items-center gap-2 py-4 text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center gap-2 py-4 text-neutral-400">
                             <svg
-                                className="h-5 w-5 animate-spin text-indigo-500"
+                                className="h-5 w-5 animate-spin text-lime-400"
                                 viewBox="0 0 24 24"
                             >
                                 <circle
@@ -169,26 +169,26 @@ function CheckoutPage({
             </div>
 
             {/* Sidebar Summary Panel */}
-            <div className="h-fit rounded-lg border border-slate-200 bg-gray-50 p-6 dark:border-slate-800 dark:bg-slate-900">
-                <h2 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
+            <div className="h-fit rounded-lg border border-neutral-800 bg-neutral-900 p-6">
+                <h2 className="mb-4 text-lg font-bold text-white uppercase">
                     Order Summary
                 </h2>
-                <div className="mb-4 divide-y divide-slate-200 dark:divide-slate-800">
+                <div className="mb-4 divide-y divide-neutral-800">
                     {cart.map((item) => (
                         <div
                             key={item.id}
-                            className="flex justify-between py-2 text-sm text-gray-700 dark:text-slate-300"
+                            className="flex justify-between py-2 text-sm text-neutral-300"
                         >
                             <span>
                                 {item.name} (x{item.quantity})
                             </span>
-                            <span className="font-semibold text-gray-900 dark:text-white">
+                            <span className="font-semibold text-white">
                                 ${(item.price * item.quantity).toFixed(2)}
                             </span>
                         </div>
                     ))}
                 </div>
-                <div className="flex justify-between border-t border-slate-200 pt-4 text-lg font-bold text-gray-900 dark:border-slate-800 dark:text-white">
+                <div className="flex justify-between border-t border-neutral-800 pt-4 text-lg font-bold text-white">
                     <span>Total:</span>
                     <span>${cartTotal.toFixed(2)}</span>
                 </div>

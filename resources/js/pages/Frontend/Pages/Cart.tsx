@@ -46,29 +46,17 @@ function CartPageContent() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
-            {/* Header / Navigation */}
-            <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-                <div className="mx-auto flex max-w-7xl items-center justify-between p-4 sm:px-6 lg:px-8">
-                    <div className="text-xl font-bold tracking-tight">
-                        THREAD&CO
-                    </div>
-                    <div className="text-sm font-medium text-gray-600">
-                        Shopping Cart {cartTotal}
-                    </div>
-                </div>
-            </header>
-
+        <div className="min-h-screen bg-neutral-950 font-sans text-white antialiased">
             {/* Main Layout Container */}
             <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                <h1 className="mb-8 text-3xl font-bold tracking-tight">
+                <h1 className="mb-8 text-3xl font-extrabold tracking-tight uppercase">
                     Your Shopping Cart
                 </h1>
 
                 {cart.length === 0 ? (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-8 py-24 text-center shadow-sm">
+                    <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-8 py-24 text-center shadow-sm">
                         <svg
-                            className="mx-auto mb-4 h-12 w-12 text-gray-400"
+                            className="mx-auto mb-4 h-12 w-12 text-neutral-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -80,16 +68,16 @@ function CartPageContent() {
                                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                             />
                         </svg>
-                        <p className="mb-2 text-lg font-medium text-gray-900">
+                        <p className="mb-2 text-lg font-medium text-white">
                             Your cart is empty
                         </p>
-                        <p className="mb-6 text-gray-500">
+                        <p className="mb-6 text-neutral-500">
                             Looks like you haven't added anything to your cart
                             yet.
                         </p>
                         <a
                             href="#shop"
-                            className="inline-flex justify-center rounded-xl bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+                            className="inline-flex justify-center rounded-xl bg-lime-400 px-6 py-3 text-sm font-bold text-black uppercase transition-colors hover:bg-lime-300"
                         >
                             Continue Shopping
                         </a>
@@ -98,8 +86,8 @@ function CartPageContent() {
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
                         {/* Left Column: Cart Items List (8 Columns) */}
                         <section className="space-y-4 lg:col-span-7">
-                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <ul className="divide-y divide-gray-200">
+                            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-sm">
+                                <ul className="divide-y divide-neutral-800">
                                     {cart && cart.length > 0
                                         ? cart.map((item) => (
                                               <li
@@ -107,7 +95,7 @@ function CartPageContent() {
                                                   className="flex py-6 first:pt-0 last:pb-0"
                                               >
                                                   {/* Product Thumbnail */}
-                                                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-100">
+                                                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-800">
                                                       <img
                                                           src={`/storage/${item.variantImage ?? item.images?.[0]}`}
                                                           alt={item.name}
@@ -119,7 +107,7 @@ function CartPageContent() {
                                                   <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
                                                       <div className="flex justify-between justify-items-start">
                                                           <div>
-                                                              <h3 className="text-base font-semibold text-gray-900 transition-colors hover:text-black">
+                                                              <h3 className="text-base font-semibold text-white transition-colors hover:text-lime-400">
                                                                   <a
                                                                       href={`/products/${item.id}`}
                                                                   >
@@ -128,14 +116,14 @@ function CartPageContent() {
                                                                       }
                                                                   </a>
                                                               </h3>
-                                                              <p className="mt-1 text-sm text-gray-500">
+                                                              <p className="mt-1 text-sm text-neutral-500">
                                                                   {
                                                                       item.description
                                                                   }
                                                               </p>
                                                               {(item.variantColor ||
                                                                   item.variantSize) && (
-                                                                  <p className="mt-1 text-xs text-gray-400">
+                                                                  <p className="mt-1 text-xs text-neutral-500">
                                                                       {[
                                                                           item.variantColor &&
                                                                               `Color: ${item.variantColor}`,
@@ -151,7 +139,7 @@ function CartPageContent() {
                                                                   </p>
                                                               )}
                                                           </div>
-                                                          <p className="ml-4 text-base font-semibold text-gray-900">
+                                                          <p className="ml-4 text-base font-semibold text-white">
                                                               $
                                                               {(
                                                                   item.price *
@@ -162,7 +150,7 @@ function CartPageContent() {
 
                                                       {/* Interactive Quantity Control Bar */}
                                                       <div className="flex items-center justify-between pt-4">
-                                                          <div className="flex items-center rounded-lg border border-gray-300 bg-gray-50">
+                                                          <div className="flex items-center rounded-lg border border-neutral-700 bg-neutral-800">
                                                               <button
                                                                   onClick={() =>
                                                                       updateQuantity(
@@ -171,12 +159,12 @@ function CartPageContent() {
                                                                           item.variantId,
                                                                       )
                                                                   }
-                                                                  className="px-3 py-1 font-medium text-gray-600 transition-colors hover:text-black"
+                                                                  className="px-3 py-1 font-medium text-neutral-300 transition-colors hover:text-lime-400"
                                                                   aria-label="Decrease quantity"
                                                               >
                                                                   &minus;
                                                               </button>
-                                                              <span className="w-6 px-2 text-center text-sm font-semibold text-gray-900 select-none">
+                                                              <span className="w-6 px-2 text-center text-sm font-semibold text-white select-none">
                                                                   {
                                                                       item.quantity
                                                                   }
@@ -189,7 +177,7 @@ function CartPageContent() {
                                                                           item.variantId,
                                                                       )
                                                                   }
-                                                                  className="px-3 py-1 font-medium text-gray-600 transition-colors hover:text-black"
+                                                                  className="px-3 py-1 font-medium text-neutral-300 transition-colors hover:text-lime-400"
                                                                   aria-label="Increase quantity"
                                                               >
                                                                   &#43;
@@ -203,7 +191,7 @@ function CartPageContent() {
                                                                       item.variantId,
                                                                   )
                                                               }
-                                                              className="flex items-center text-sm font-medium text-red-600 transition-colors hover:text-red-500"
+                                                              className="flex items-center text-sm font-medium text-red-400 transition-colors hover:text-red-300"
                                                           >
                                                               <svg
                                                                   className="mr-1 h-4 w-4"
@@ -231,28 +219,28 @@ function CartPageContent() {
 
                         {/* Right Column: Order Summary Card (5 Columns) */}
                         <aside className="space-y-4 lg:col-span-5">
-                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h2 className="mb-6 text-lg font-semibold text-gray-900">
+                            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-sm">
+                                <h2 className="mb-6 text-lg font-semibold text-white uppercase">
                                     Order Summary
                                 </h2>
 
                                 {/* Cost Calculations Pricing Table */}
-                                <div className="space-y-4 text-sm text-gray-600">
+                                <div className="space-y-4 text-sm text-neutral-400">
                                     <div className="flex justify-between">
                                         <span>Subtotal</span>
-                                        <span className="font-medium text-gray-900">
+                                        <span className="font-medium text-white">
                                             ${subtotal.toFixed(2)}
                                         </span>
                                     </div>
                                     {discount > 0 && (
-                                        <div className="flex justify-between text-emerald-600">
+                                        <div className="flex justify-between text-lime-400">
                                             <span>Discount (WELCOME10)</span>
                                             <span>-${discount.toFixed(2)}</span>
                                         </div>
                                     )}
                                     <div className="flex justify-between">
                                         <span>Shipping</span>
-                                        <span className="font-medium text-gray-900">
+                                        <span className="font-medium text-white">
                                             {shipping === 0
                                                 ? 'Free'
                                                 : `$${shipping.toFixed(2)}`}
@@ -260,12 +248,12 @@ function CartPageContent() {
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Estimated Tax</span>
-                                        <span className="font-medium text-gray-900">
+                                        <span className="font-medium text-white">
                                             ${estimatedTax.toFixed(2)}
                                         </span>
                                     </div>
-                                    <hr className="my-4 border-gray-200" />
-                                    <div className="flex justify-between text-base font-bold text-gray-900">
+                                    <hr className="my-4 border-neutral-800" />
+                                    <div className="flex justify-between text-base font-bold text-white">
                                         <span>Order Total</span>
                                         <span>${total.toFixed(2)}</span>
                                     </div>
@@ -283,11 +271,11 @@ function CartPageContent() {
                                         onChange={(e) =>
                                             setPromoCode(e.target.value)
                                         }
-                                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+                                        className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2 text-sm text-white placeholder-neutral-500 focus:border-transparent focus:ring-1 focus:ring-lime-400 focus:outline-none"
                                     />
                                     <button
                                         type="submit"
-                                        className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-200"
+                                        className="rounded-lg bg-neutral-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700"
                                     >
                                         Apply
                                     </button>
@@ -296,13 +284,13 @@ function CartPageContent() {
                                 {/* Checkout Button */}
                                 <button
                                     onClick={handleProceedCheckout}
-                                    className="mt-6 flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus:outline-none"
+                                    className="mt-6 flex w-full items-center justify-center rounded-xl bg-lime-400 px-6 py-3 text-sm font-bold text-black uppercase transition-colors hover:bg-lime-300 focus:outline-none"
                                 >
                                     Proceed to Checkout
                                 </button>
                             </div>
                             {/* Security trust badge info */}
-                            <p className="text-center text-xs text-gray-500">
+                            <p className="text-center text-xs text-neutral-500">
                                 🔒 Secure 256-bit SSL encrypted transaction
                                 verification.
                             </p>
