@@ -9,9 +9,6 @@ interface VariantForm {
     id?: number;
     size: string;
     color: string;
-    is_featured: boolean;
-    is_exclusive: boolean;
-    is_new_arrival: boolean;
     parent_image_index: number | null;
 }
 
@@ -24,6 +21,9 @@ interface AdminProductCreatePageProps {
         price: string;
         status: string;
         images: string[];
+        is_featured: boolean;
+        is_exclusive: boolean;
+        is_new_arrival: boolean;
         variants: VariantForm[];
     };
     categories: Category[];
@@ -38,9 +38,6 @@ const createEmptyVariant = (): VariantForm => ({
     key: createVariantKey(),
     size: '',
     color: '',
-    is_featured: false,
-    is_exclusive: false,
-    is_new_arrival: false,
     parent_image_index: null,
 });
 
@@ -52,6 +49,9 @@ interface ProductForm {
     status: string;
     images: File[];
     existing_images: string[];
+    is_featured: boolean;
+    is_exclusive: boolean;
+    is_new_arrival: boolean;
     variants: VariantForm[];
 }
 
@@ -68,14 +68,14 @@ export default function AdminProductCreatePage({
             status: product?.status || 'Draft',
             images: [],
             existing_images: product?.images ?? [],
+            is_featured: product?.is_featured || false,
+            is_exclusive: product?.is_exclusive || false,
+            is_new_arrival: product?.is_new_arrival || false,
             variants: (product?.variants ?? []).map((variant) => ({
                 key: createVariantKey(),
                 id: variant.id,
                 size: variant.size,
                 color: variant.color,
-                is_featured: variant.is_featured,
-                is_exclusive: variant.is_exclusive,
-                is_new_arrival: variant.is_new_arrival,
                 parent_image_index: variant.parent_image_index,
             })),
         });
@@ -331,6 +331,44 @@ export default function AdminProductCreatePage({
                         </div>
                     </div>
 
+                    <div className="mt-4 flex flex-wrap gap-6">
+                        <label className="flex items-center gap-2 text-sm text-slate-700">
+                            <input
+                                type="checkbox"
+                                checked={data.is_featured}
+                                onChange={(e) =>
+                                    setData('is_featured', e.target.checked)
+                                }
+                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            Featured
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm text-slate-700">
+                            <input
+                                type="checkbox"
+                                checked={data.is_exclusive}
+                                onChange={(e) =>
+                                    setData('is_exclusive', e.target.checked)
+                                }
+                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            Exclusive
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm text-slate-700">
+                            <input
+                                type="checkbox"
+                                checked={data.is_new_arrival}
+                                onChange={(e) =>
+                                    setData('is_new_arrival', e.target.checked)
+                                }
+                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            New Arrival
+                        </label>
+                    </div>
+
                     <div>
                         <label
                             htmlFor="images"
@@ -491,56 +529,6 @@ export default function AdminProductCreatePage({
                                                 className="mt-1 block w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-900 placeholder-slate-400 transition focus:ring-2 focus:ring-indigo-500/20 focus:outline-none sm:text-sm"
                                             />
                                         </div>
-                                    </div>
-
-                                    <div className="mt-4 flex flex-wrap gap-6">
-                                        <label className="flex items-center gap-2 text-sm text-slate-700">
-                                            <input
-                                                type="checkbox"
-                                                checked={variant.is_featured}
-                                                onChange={(e) =>
-                                                    updateVariant(
-                                                        variant.key,
-                                                        'is_featured',
-                                                        e.target.checked,
-                                                    )
-                                                }
-                                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                            />
-                                            Featured
-                                        </label>
-
-                                        <label className="flex items-center gap-2 text-sm text-slate-700">
-                                            <input
-                                                type="checkbox"
-                                                checked={variant.is_exclusive}
-                                                onChange={(e) =>
-                                                    updateVariant(
-                                                        variant.key,
-                                                        'is_exclusive',
-                                                        e.target.checked,
-                                                    )
-                                                }
-                                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                            />
-                                            Exclusive
-                                        </label>
-
-                                        <label className="flex items-center gap-2 text-sm text-slate-700">
-                                            <input
-                                                type="checkbox"
-                                                checked={variant.is_new_arrival}
-                                                onChange={(e) =>
-                                                    updateVariant(
-                                                        variant.key,
-                                                        'is_new_arrival',
-                                                        e.target.checked,
-                                                    )
-                                                }
-                                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                            />
-                                            New Arrival
-                                        </label>
                                     </div>
 
                                     <div className="mt-4">

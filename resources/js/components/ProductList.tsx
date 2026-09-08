@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ProductListProps } from '@/types/product';
 import { useCart } from '../pages/Frontend/Pages/CartContext';
+import { formatCurrency } from '@/services/currency';
 
 export default function ProductList({ products = [] }: ProductListProps) {
     const { addToCart } = useCart();
@@ -42,19 +43,11 @@ export default function ProductList({ products = [] }: ProductListProps) {
                                     {product.category}
                                 </span>
                                 <Link href={`/products/${product.slug}`}>
-                                    {product.variants ? (
-                                        <img
-                                            src={`/storage/${product.variants[0]?.image}`}
-                                            alt={product.name}
-                                            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                                        />
-                                    ) : (
-                                        <img
-                                            src={`/storage/${product.images[0]}`}
-                                            alt={product.name}
-                                            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                                        />
-                                    )}
+                                    <img
+                                        src={`/storage/${product.images[0]}`}
+                                        alt={product.name}
+                                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                    />
                                 </Link>
                             </div>
 
@@ -76,7 +69,7 @@ export default function ProductList({ products = [] }: ProductListProps) {
                                 </div>
                                 <div className="z-20 mt-3 flex items-center justify-between">
                                     <p className="text-sm font-bold text-neutral-300">
-                                        {product.price}
+                                        {formatCurrency(product.price)}
                                     </p>
                                 </div>
                                 <button

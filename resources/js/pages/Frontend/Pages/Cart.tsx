@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import Wrapper from './Wrapper';
 import { router } from '@inertiajs/react';
+import { formatCurrency } from '@/services/currency';
 
 export default function CartPage() {
     return (
@@ -140,11 +141,10 @@ function CartPageContent() {
                                                               )}
                                                           </div>
                                                           <p className="ml-4 text-base font-semibold text-white">
-                                                              $
-                                                              {(
+                                                              {formatCurrency(
                                                                   item.price *
-                                                                  item.quantity
-                                                              ).toFixed(2)}
+                                                                      item.quantity,
+                                                              )}
                                                           </p>
                                                       </div>
 
@@ -229,13 +229,15 @@ function CartPageContent() {
                                     <div className="flex justify-between">
                                         <span>Subtotal</span>
                                         <span className="font-medium text-white">
-                                            ${subtotal.toFixed(2)}
+                                            {formatCurrency(subtotal)}
                                         </span>
                                     </div>
                                     {discount > 0 && (
                                         <div className="flex justify-between text-lime-400">
                                             <span>Discount (WELCOME10)</span>
-                                            <span>-${discount.toFixed(2)}</span>
+                                            <span>
+                                                -{formatCurrency(discount)}
+                                            </span>
                                         </div>
                                     )}
                                     <div className="flex justify-between">
@@ -243,19 +245,19 @@ function CartPageContent() {
                                         <span className="font-medium text-white">
                                             {shipping === 0
                                                 ? 'Free'
-                                                : `$${shipping.toFixed(2)}`}
+                                                : `${formatCurrency(shipping)}`}
                                         </span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Estimated Tax</span>
                                         <span className="font-medium text-white">
-                                            ${estimatedTax.toFixed(2)}
+                                            {formatCurrency(estimatedTax)}
                                         </span>
                                     </div>
                                     <hr className="my-4 border-neutral-800" />
                                     <div className="flex justify-between text-base font-bold text-white">
                                         <span>Order Total</span>
-                                        <span>${total.toFixed(2)}</span>
+                                        <span>{formatCurrency(total)}</span>
                                     </div>
                                 </div>
 

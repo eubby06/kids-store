@@ -46,12 +46,12 @@ class AdminProductsController extends Controller
             'status' => 'required|in:Draft,Published',
             'images' => 'nullable|array',
             'images.*' => 'image|max:4096',
+            'is_featured' => 'nullable|boolean',
+            'is_exclusive' => 'nullable|boolean',
+            'is_new_arrival' => 'nullable|boolean',
             'variants' => ['nullable', 'array', $this->uniqueVariantComboRule()],
             'variants.*.size' => 'nullable|string|max:50',
             'variants.*.color' => 'nullable|string|max:50',
-            'variants.*.is_featured' => 'nullable|boolean',
-            'variants.*.is_exclusive' => 'nullable|boolean',
-            'variants.*.is_new_arrival' => 'nullable|boolean',
             'variants.*.parent_image_index' => 'nullable|integer|min:0',
         ]);
 
@@ -76,6 +76,9 @@ class AdminProductsController extends Controller
                 'price' => (int) round($validated['price'] * 100),
                 'description' => $validated['description'] ?? null,
                 'images' => $imagePaths,
+                'is_featured' => (bool) ($validated['is_featured'] ?? false),
+                'is_exclusive' => (bool) ($validated['is_exclusive'] ?? false),
+                'is_new_arrival' => (bool) ($validated['is_new_arrival'] ?? false),
             ]);
 
             foreach ($request->input('variants', []) as $variant) {
@@ -89,10 +92,7 @@ class AdminProductsController extends Controller
                     'sku' => Str::upper($uniqueSlug . '-' . Str::random(6)),
                     'size' => $variant['size'] ?? null,
                     'color' => $variant['color'] ?? null,
-                    'image' => $variantImage,
-                    'is_featured' => (bool) ($variant['is_featured'] ?? false),
-                    'is_exclusive' => (bool) ($variant['is_exclusive'] ?? false),
-                    'is_new_arrival' => (bool) ($variant['is_new_arrival'] ?? false),
+                    'image' => $variantImage
                 ]);
             }
         });
@@ -118,6 +118,9 @@ class AdminProductsController extends Controller
                 // there is no persisted status column yet, default to Draft
                 'status' => 'Draft',
                 'images' => $images,
+                'is_featured' => $product->is_featured,
+                'is_exclusive' => $product->is_exclusive,
+                'is_new_arrival' => $product->is_new_arrival,
                 'variants' => $product->variants->map(function ($variant) use ($images) {
                     $imageIndex = $variant->image ? array_search($variant->image, $images) : false;
 
@@ -125,9 +128,6 @@ class AdminProductsController extends Controller
                         'id' => $variant->id,
                         'size' => $variant->size,
                         'color' => $variant->color,
-                        'is_featured' => $variant->is_featured,
-                        'is_exclusive' => $variant->is_exclusive,
-                        'is_new_arrival' => $variant->is_new_arrival,
                         'parent_image_index' => $imageIndex !== false ? $imageIndex : null,
                     ];
                 })->values(),
@@ -149,13 +149,13 @@ class AdminProductsController extends Controller
             'images.*' => 'image|max:4096',
             'existing_images' => 'nullable|array',
             'existing_images.*' => 'string',
+            'is_featured' => 'nullable|boolean',
+            'is_exclusive' => 'nullable|boolean',
+            'is_new_arrival' => 'nullable|boolean',
             'variants' => ['nullable', 'array', $this->uniqueVariantComboRule()],
             'variants.*.id' => 'nullable|exists:variants,id',
             'variants.*.size' => 'nullable|string|max:50',
             'variants.*.color' => 'nullable|string|max:50',
-            'variants.*.is_featured' => 'nullable|boolean',
-            'variants.*.is_exclusive' => 'nullable|boolean',
-            'variants.*.is_new_arrival' => 'nullable|boolean',
             'variants.*.parent_image_index' => 'nullable|integer|min:0',
         ]);
 
@@ -179,6 +179,9 @@ class AdminProductsController extends Controller
                 'price' => (int) round($validated['price'] * 100),
                 'description' => $validated['description'] ?? null,
                 'images' => array_merge($retainedImages, $imagePaths),
+                'is_featured' => (bool) ($validated['is_featured'] ?? false),
+                'is_exclusive' => (bool) ($validated['is_exclusive'] ?? false),
+                'is_new_arrival' => (bool) ($validated['is_new_arrival'] ?? false)
             ]);
 
             // parent_image_index refers to the combined retained + newly
@@ -200,10 +203,7 @@ class AdminProductsController extends Controller
                         'sku' => Str::upper($product->slug . '-' . Str::random(6)),
                         'size' => $variantData['size'] ?? null,
                         'color' => $variantData['color'] ?? null,
-                        'image' => $variantImage,
-                        'is_featured' => (bool) ($variantData['is_featured'] ?? false),
-                        'is_exclusive' => (bool) ($variantData['is_exclusive'] ?? false),
-                        'is_new_arrival' => (bool) ($variantData['is_new_arrival'] ?? false),
+                        'image' => $variantImage
                     ]
                 );
 
