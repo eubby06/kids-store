@@ -3,6 +3,17 @@ export type * from './product';
 import { Product } from './product';
 import { Variant } from './product';
 import { Category } from './category';
+import { PageProps as InertiaPageProps } from '@inertiajs/core';
+
+export interface PageProps extends InertiaPageProps {
+    auth: {
+        user: any; // Replace with your User type if available
+    };
+    flash: {
+        success: string | null;
+        error: string | null;
+    };
+}
 
 export interface storefrontProps {
     status?: string;

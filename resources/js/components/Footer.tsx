@@ -29,6 +29,12 @@ export default function Footer() {
                         >
                             Terms of Service
                         </Link>
+                        <Link
+                            href="/contact-us"
+                            className="text-sm text-neutral-500 hover:text-lime-400"
+                        >
+                            Contact Us
+                        </Link>
                     </nav>
                 </div>
             </div>

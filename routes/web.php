@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminOrdersController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ProductSearchController;
+use App\Http\Controllers\MessagesController;
 
 
 // customer facing
@@ -21,6 +22,8 @@ Route::inertia('/refund-policy', 'Frontend/Pages/RefundPolicy')->name('reund.pol
 Route::inertia('/terms-of-service', 'Frontend/Pages/TermsOfService')->name('terms.of.service');
 
 Route::get('/', [StoreFrontController::class, 'index'])->name('home');
+Route::get('/contact-us', [MessagesController::class, 'index'])->name('contact.index');
+Route::post('/contact-us', [MessagesController::class, 'submit'])->name('contact.submit');
 Route::get('/products', [ProductsController::class, 'getAll'])->name('products');
 Route::get('/products/{slug}', [ProductsController::class, 'getId'])->name('products.show');
 Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout');
