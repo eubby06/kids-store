@@ -9,8 +9,11 @@ class MessagesController extends Controller
 {
     public function index()
     {
+        $messages = Message::all();
+
         return inertia('Frontend/Pages/Contact', [
-            'status' => session('status')
+            'status' => session('status'),
+            'messages' => $messages
         ]);
     }
 

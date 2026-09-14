@@ -7,16 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Message;
 
 class AdminController extends Controller
 {
     public function index()
     {
         $productCount = Product::count();
+        $messageCount = Message::count();
         $orderCount = Order::count();
 
         return inertia('Admin/Pages/Dashboard', [
             'status' => session('status'),
+            'messageCount' => $messageCount,
             'productCount' => $productCount,
             'orderCount' => $orderCount
         ]);

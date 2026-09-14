@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import Wrapper from './Wrapper';
-import { router } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { formatCurrency } from '@/services/currency';
 
 export default function CartPage() {
@@ -14,8 +14,10 @@ export default function CartPage() {
 
 function CartPageContent() {
     const { cart, updateQuantity, removeFromCart, cartTotal } = useCart();
+    const { data, setData, post, processing } = useForm({
+        code: '',
+    });
 
-    const [promoCode, setPromoCode] = useState('');
     const [discount, setDiscount] = useState(0);
 
     const subtotal = cartTotal;
@@ -23,14 +25,12 @@ function CartPageContent() {
     const estimatedTax = subtotal * 0.08; // 8% flat tax example
     const total = subtotal - discount + shipping + estimatedTax;
 
-    const handleApplyPromo = (e: React.FormEvent) => {
+    const handleApplyPromo = (e: React.SubmitEvent) => {
         e.preventDefault();
-        if (promoCode.toUpperCase() === 'WELCOME10') {
-            setDiscount(10);
-            alert('Promo code applied: $10.00 off!');
-        } else {
-            alert('Invalid promo code');
-        }
+        post('/cart/coupon', {
+            // Change route() to a hardcoded string
+            preserveScroll: true,
+        });
     };
 
     const handleProceedCheckout = () => {
@@ -269,10 +269,10 @@ function CartPageContent() {
                                     <input
                                         type="text"
                                         placeholder="Promo code"
-                                        value={promoCode}
-                                        onChange={(e) =>
-                                            setPromoCode(e.target.value)
-                                        }
+                                        value={data.code}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>,
+                                        ) => setData('code', e.target.value)}
                                         className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2 text-sm text-white placeholder-neutral-500 focus:border-transparent focus:ring-1 focus:ring-lime-400 focus:outline-none"
                                     />
                                     <button

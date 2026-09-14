@@ -4,9 +4,11 @@ import Layout from './Layout';
 export default function AdminDashboard({
     productCount,
     orderCount,
+    messageCount,
 }: {
     productCount: number;
     orderCount: number;
+    messageCount: number;
 }) {
     const stats = [
         {
@@ -20,7 +22,7 @@ export default function AdminDashboard({
             accent: 'text-slate-900 dark:text-white',
         },
         { label: 'New Orders', value: 24, accent: 'text-emerald-600' },
-        { label: 'New Messages', value: 9, accent: 'text-sky-600' },
+        { label: 'New Messages', value: messageCount, accent: 'text-sky-600' },
         { label: 'Canceled Orders', value: 7, accent: 'text-red-600' },
         { label: 'Out of Stock Products', value: 5, accent: 'text-amber-600' },
     ];
@@ -80,6 +82,30 @@ export default function AdminDashboard({
                         </p>
                         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                             Track and update order statuses
+                        </p>
+                    </Link>
+
+                    <Link
+                        href="/admin/messages"
+                        className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+                    >
+                        <p className="font-semibold text-slate-900 dark:text-white">
+                            Manage Messages
+                        </p>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            Respond to messages and enquiries
+                        </p>
+                    </Link>
+
+                    <Link
+                        href="/admin/coupons"
+                        className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+                    >
+                        <p className="font-semibold text-slate-900 dark:text-white">
+                            Manage Coupons
+                        </p>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            Create and manage coupons
                         </p>
                     </Link>
                 </div>

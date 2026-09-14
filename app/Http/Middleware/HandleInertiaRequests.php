@@ -35,6 +35,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $cartService = app(\App\Services\CartService::class);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -43,7 +45,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success')
-            ]
+            ],
+            'cart' => $cartService->getDetails()
         ];
     }
 }

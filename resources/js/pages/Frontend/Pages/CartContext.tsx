@@ -1,112 +1,90 @@
-// CartContext.tsx
-import React, {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    ReactNode,
-} from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { PageProps as InertiaPageProps } from '@inertiajs/core'; // or '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react';
 import { CartItem, CartContextType } from '@/types';
 import { Product, Variant } from '@/types/product';
 import { toast } from 'react-hot-toast';
 
-// Initialize context with undefined to force safe hook patterns
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 interface CartProviderProps {
     children: ReactNode;
 }
 
+// 1. Define the internal shape of your cart data
+interface CartData {
+    items: CartItem[];
+    subtotal: number;
+    discount: number;
+    total: number;
+    coupon: { code: string } | null;
+}
+
+// 2. Extend Inertia's base PageProps constraint
+interface PageProps extends InertiaPageProps {
+    cart: CartData;
+    errors: any; // Included for convenience with standard forms
+}
+
 export function CartProvider({ children }: CartProviderProps) {
-    // Start empty on every render so the client's first pass matches the
-    // server-rendered HTML; the saved cart is loaded after mount below.
-    const [cart, setCart] = useState<CartItem[]>([]);
-    const [isHydrated, setIsHydrated] = useState(false);
+    // Pull the real-time server-calculated cart directly from Inertia props
+    const { props } = usePage<PageProps>();
 
-    useEffect(() => {
-        const saved = localStorage.getItem('react_ts_cart');
-        if (saved) {
-            setCart(JSON.parse(saved));
-        }
-        setIsHydrated(true);
-    }, []);
+    // Provide safe fallbacks if the route doesn't share cart data yet
+    const serverCart = props.cart?.items || [];
+    const cartTotal = props.cart?.total || 0;
 
-    useEffect(() => {
-        if (!isHydrated) {
-            return;
-        }
-        localStorage.setItem('react_ts_cart', JSON.stringify(cart));
-    }, [cart, isHydrated]);
+    // Count items from server data
+    const cartCount = serverCart.reduce((sum, item) => sum + item.quantity, 0);
 
     const addToCart = (product: Product, variant?: Variant) => {
-        setCart((prevCart) => {
-            toast.success(`${product.name} added to cart`);
-            const existing = prevCart.find(
-                (item) =>
-                    item.id === product.id && item.variantId === variant?.id,
-            );
-            if (existing) {
-                return prevCart.map((item) =>
-                    item === existing
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item,
-                );
-            }
-            return [
-                ...prevCart,
-                {
-                    ...product,
-                    quantity: 1,
-                    variantId: variant?.id,
-                    variantImage: variant?.image,
-                    variantColor: variant?.color,
-                    variantSize: variant?.size,
-                },
-            ];
+        router.post(
+            '/cart/items',
+            {
+                product_id: product.id,
+                variant_id: variant?.id,
+                quantity: 1,
+                price: product.price, // Server should ideally resolve this, but matches your service signatures
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => toast.success(`${product.name} added to cart`),
+            },
+        );
+    };
+
+    const updateQuantity = (id: number, delta: number, variantId?: number) => {
+        router.put(
+            `/cart/items/update`,
+            {
+                id,
+                variant_id: variantId,
+                delta: delta, // Send -1 or +1 to the backend
+            },
+            {
+                preserveScroll: true,
+            },
+        );
+    };
+
+    const removeFromCart = (id: number, variantId?: number) => {
+        router.delete(`/cart/items`, {
+            data: { id, variant_id: variantId },
+            preserveScroll: true,
+            onSuccess: () => toast.success('Item removed from cart'),
         });
     };
 
-    const updateQuantity = (
-        id: number,
-        delta: number,
-        variantId?: number,
-    ) => {
-        setCart((prevCart) =>
-            prevCart
-                .map((item) =>
-                    item.id === id && item.variantId === variantId
-                        ? { ...item, quantity: item.quantity + delta }
-                        : item,
-                )
-                .filter((item) => item.quantity > 0),
-        );
-    };
-
-    // 🌟 New: Removes a single item entirely from the state array
-    const removeFromCart = (id: number, variantId?: number) => {
-        setCart((prevCart) =>
-            prevCart.filter(
-                (item) => !(item.id === id && item.variantId === variantId),
-            ),
-        );
-    };
-
-    // Inside your CartContext.tsx
     const clearCart = () => {
-        setCart([]); // Clear React state memory
-        localStorage.removeItem('react_ts_cart'); // Wipe browser storage
+        router.delete('/cart', {
+            preserveScroll: true,
+        });
     };
-
-    const cartTotal = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-    );
-    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
         <CartContext.Provider
             value={{
-                cart,
+                cart: serverCart,
                 addToCart,
                 updateQuantity,
                 removeFromCart,
@@ -120,18 +98,13 @@ export function CartProvider({ children }: CartProviderProps) {
     );
 }
 
-// Custom hook with built-in null checking for TS safety
 export const useCart = (): CartContextType => {
     const context = useContext(CartContext);
-
     if (context === undefined) {
-        // Guard: instead of throwing (which crashes the app during hot reload
-        // or if a component is accidentally rendered outside the provider),
-        // return a safe fallback and warn in the console.
         console.warn(
             'useCart used outside of CartProvider — returning fallback API.',
         );
-        const fallback: CartContextType = {
+        return {
             cart: [],
             addToCart: () => {},
             removeFromCart: () => {},
@@ -140,8 +113,6 @@ export const useCart = (): CartContextType => {
             cartTotal: 0,
             cartCount: 0,
         };
-        return fallback;
     }
-
     return context;
 };

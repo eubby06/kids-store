@@ -20,7 +20,7 @@ export default function Categories({ categories = [] }: CategoriesProps) {
                     <Link
                         key={idx}
                         href={`/products?category=${cat.slug}`}
-                        className="group relative flex h-24 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-sm transition hover:border-lime-400/50 hover:shadow-md"
+                        className="group relative flex h-16 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-sm transition hover:border-lime-400/50 hover:shadow-md"
                     >
                         <span className="text-sm font-semibold tracking-wide text-neutral-300 uppercase transition group-hover:text-lime-400 sm:text-base">
                             {cat.name}

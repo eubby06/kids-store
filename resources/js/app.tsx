@@ -2,7 +2,6 @@ import React from 'react';
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
-import { CartProvider } from './pages/Frontend/Pages/CartContext';
 import { Toaster } from 'react-hot-toast';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -32,10 +31,10 @@ createInertiaApp({
         }
 
         const app = (
-            <CartProvider>
+            <>
                 <App {...props} />
                 <Toaster position="top-right" />
-            </CartProvider>
+            </>
         );
 
         // --- 3. HYDRATE ONLY WHEN SERVER-RENDERED MARKUP EXISTS ---
