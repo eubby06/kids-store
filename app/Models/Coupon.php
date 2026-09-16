@@ -16,4 +16,14 @@ class Coupon extends Model
             'expires_at',
             'is_active',
     ];
+
+
+    public function isValid()
+    {
+        if ($this->is_active) {
+            return true;
+        }
+
+        return false;
+    }
 }

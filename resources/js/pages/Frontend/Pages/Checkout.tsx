@@ -5,6 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
 import { router } from '@inertiajs/react';
+import { formatCurrency } from '@/services/currency';
 
 interface CheckoutPageProps {
     clientSecret: string;
@@ -40,29 +41,15 @@ function CheckoutPage({
                 return;
             }
 
-            const formattedCartPayload = cart.map((item) => ({
-                id: item.id,
-                quantity: item.quantity,
-            }));
-
-            router.post(
-                '/checkout/initialize',
-                {
-                    cart: formattedCartPayload,
-                },
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                },
-            );
+            router.post('/checkout/initialize');
         }
     }, [clientSecret, isMounted, cart]);
 
-    const stripePromise = useMemo(
-        () =>
-            isMounted && stripePublicKey ? loadStripe(stripePublicKey) : null,
-        [isMounted, stripePublicKey],
-    );
+    const stripePromise = useMemo(() => {
+        return isMounted && stripePublicKey
+            ? loadStripe(stripePublicKey)
+            : null;
+    }, [isMounted, stripePublicKey]);
 
     const [shippingData, setShippingData] = useState({
         name: '',
@@ -183,14 +170,14 @@ function CheckoutPage({
                                 {item.name} (x{item.quantity})
                             </span>
                             <span className="font-semibold text-white">
-                                ${(item.price * item.quantity).toFixed(2)}
+                                {formatCurrency(item.price * item.quantity)}
                             </span>
                         </div>
                     ))}
                 </div>
                 <div className="flex justify-between border-t border-neutral-800 pt-4 text-lg font-bold text-white">
                     <span>Total:</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span>{formatCurrency(cartTotal)}</span>
                 </div>
             </div>
         </div>

@@ -33,6 +33,7 @@ export function CartProvider({ children }: CartProviderProps) {
     // Provide safe fallbacks if the route doesn't share cart data yet
     const serverCart = props.cart?.items || [];
     const cartTotal = props.cart?.total || 0;
+    const appliedCoupon = props.cart?.coupon?.code || '';
 
     // Count items from server data
     const cartCount = serverCart.reduce((sum, item) => sum + item.quantity, 0);
@@ -91,6 +92,7 @@ export function CartProvider({ children }: CartProviderProps) {
                 clearCart,
                 cartTotal,
                 cartCount,
+                appliedCoupon,
             }}
         >
             {children}
@@ -112,6 +114,7 @@ export const useCart = (): CartContextType => {
             clearCart: () => {},
             cartTotal: 0,
             cartCount: 0,
+            appliedCoupon: '',
         };
     }
     return context;

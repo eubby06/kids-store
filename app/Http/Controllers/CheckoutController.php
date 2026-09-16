@@ -8,38 +8,42 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Services\CartService;
+use App\Enums\OrderStatus;
 
 class CheckoutController extends Controller
 {
-    public function initialize(Request $request)
+    public function initialize(Request $request, CartService $cartService)
     {
-        $request->validate(['cart' => 'required|array']);
-        $cart = $request->input('cart');
+        $cart = $cartService->getDetails();
         $stripe = new StripeClient(config('services.stripe.secret'));
 
-        // 1. Calculate price from DB values to prevent tampering
-        // Stripe expects integers in cents. If $product->price is a decimal like 19.99, multiply by 100.
-        $totalAmountInCents = 0;
+        $totalAmountInCents = $cart['total'];
         $compactMetadata = [];
-        foreach ($cart as $item) {
+        foreach ($cart['items'] as $item) {
             $product = Product::find($item['id']);
             if ($product) {
-                $totalAmountInCents += (int) (round($product->price * 100) * $item['quantity']);
                 $compactMetadata[$product->id] = $item['quantity'];
             }
         }
 
-        // 2. REFRESH GUARD: Reuse open intents to avoid duplicate entries
+        // 2. REFRESH GUARD: Reuse open intents AND open pending guest orders
         if ($request->session()->has('stripe_payment_intent_id')) {
             try {
                 $existingIntentId = $request->session()->get('stripe_payment_intent_id');
                 $existingIntent = $stripe->paymentIntents->retrieve($existingIntentId);
 
                 if ($existingIntent->status === 'requires_payment_method') {
+                    // Update Stripe with the latest cart values
                     $stripe->paymentIntents->update($existingIntentId, [
                         'amount' => $totalAmountInCents,
                         'metadata' => ['cart_items' => json_encode($compactMetadata)]
                     ]);
+
+                    // 🌟 Update your local pending order total if the cart changed
+                    Order::where('stripe_payment_intent_id', $existingIntentId)
+                        ->where('status', OrderStatus::PENDING)
+                        ->update(['total_amount' => $totalAmountInCents / 100]);
 
                     return redirect()->route('checkout.show')->with([
                         'clientSecret' => $existingIntent->client_secret,
@@ -57,18 +61,28 @@ class CheckoutController extends Controller
             'currency' => 'usd',
             'automatic_payment_methods' => ['enabled' => true],
             'metadata' => [
-                'user_id' => auth()->id() ?? 'guest',
+                'user_id' => 'guest', // Explicitly marked as guest
                 'cart_items' => json_encode($compactMetadata)
             ]
+        ]);
+
+        // 🌟 4. Create the local pending Order record immediately
+        // This gives your database a target record to look up later
+        Order::create([
+            'stripe_payment_intent_id' => $paymentIntent->id,
+            'total_amount' => $totalAmountInCents / 100,
+            'status' => OrderStatus::PENDING,
+            // Shipping fields will remain null until filled via webhook or frontend form
         ]);
 
         $request->session()->put('stripe_payment_intent_id', $paymentIntent->id);
 
         return redirect()->route('checkout.show')->with([
             'clientSecret' => $paymentIntent->client_secret,
-            'amount' => $totalAmountInCents / 100 // Convert cents back to raw dollars
+            'amount' => $totalAmountInCents / 100 
         ]);
     }
+
 
     public function show()
     {
@@ -108,7 +122,7 @@ class CheckoutController extends Controller
                         ];
                     });
 
-                    return Inertia::render('Checkout/Success', [
+                    return Inertia::render('Frontend/Pages/CheckoutSuccess', [
                         'orderId' => $existingOrder->id,
                         'amount' => $intent->amount / 100,
                         'items' => $formattedItems
@@ -149,10 +163,10 @@ class CheckoutController extends Controller
                         'total_amount' => $intent->amount / 100,
                         'status' => 'Paid',
                         'customer_email' => $customerEmail,
-                        // 'shipping_name' => $shippingName,
-                        // 'shipping_address' => $shippingAddress,
-                        // 'shipping_city' => $shippingCity,
-                        // 'shipping_zip' => $shippingZip,
+                        'shipping_name' => $shippingName,
+                        'shipping_address' => $shippingAddress,
+                        'shipping_city' => $shippingCity,
+                        'shipping_zip' => $shippingZip,
                     ]);
 
                     // B. Attach items directly to the pivot table using attach()

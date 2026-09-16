@@ -1,4 +1,4 @@
-import { Category } from '@/types';
+import { Category } from '@/types/category';
 import { Head, Link, router } from '@inertiajs/react';
 import { toast } from 'react-hot-toast';
 import Layout from './Layout';

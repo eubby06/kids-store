@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { PageProps as InertiaPageProps } from '@inertiajs/core'; // or '@inertiajs/react'
 import { useCart } from './CartContext';
 import Wrapper from './Wrapper';
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 import { formatCurrency } from '@/services/currency';
+import { toast } from 'react-hot-toast';
 
 export default function CartPage() {
     return (
@@ -13,7 +15,8 @@ export default function CartPage() {
 }
 
 function CartPageContent() {
-    const { cart, updateQuantity, removeFromCart, cartTotal } = useCart();
+    const { cart, updateQuantity, removeFromCart, cartTotal, appliedCoupon } =
+        useCart();
     const { data, setData, post, processing } = useForm({
         code: '',
     });
@@ -24,6 +27,20 @@ function CartPageContent() {
     const shipping = subtotal > 75 || subtotal === 0 ? 0 : 5.99;
     const estimatedTax = subtotal * 0.08; // 8% flat tax example
     const total = subtotal - discount + shipping + estimatedTax;
+
+    const handleRemoveCoupon = (): void => {
+        router.delete('/cart/coupon', {
+            preserveScroll: true,
+            onSuccess: (): void => {
+                toast.success('Coupon removed from your order');
+            },
+            onError: (errors: Record<string, string>): void => {
+                // Logs and displays any validation errors returned from the server
+                console.error('Coupon removal failed:', errors);
+                toast.error('Could not remove the coupon. Please try again.');
+            },
+        });
+    };
 
     const handleApplyPromo = (e: React.SubmitEvent) => {
         e.preventDefault();
@@ -232,14 +249,36 @@ function CartPageContent() {
                                             {formatCurrency(subtotal)}
                                         </span>
                                     </div>
-                                    {discount > 0 && (
-                                        <div className="flex justify-between text-lime-400">
-                                            <span>Discount (WELCOME10)</span>
-                                            <span>
-                                                -{formatCurrency(discount)}
-                                            </span>
+
+                                    {/* 🏷️ APPLIED COUPON INSERTION POINT */}
+                                    {appliedCoupon && (
+                                        <div className="flex items-center justify-between rounded-lg border border-lime-900/30 bg-lime-950/20 px-3 py-2 text-lime-400">
+                                            <div className="flex items-center gap-2">
+                                                {/* Visual anchor emoji */}
+                                                <span>🏷️</span>
+                                                <span className="font-medium uppercase">
+                                                    {appliedCoupon}
+                                                </span>
+                                                <span className="text-xs text-lime-500/80">
+                                                    (10% Off)
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="font-semibold">
+                                                    -{formatCurrency(discount)}
+                                                </span>
+                                                {/* Inline cancellation utility */}
+                                                <button
+                                                    onClick={handleRemoveCoupon}
+                                                    className="text-xs font-bold text-neutral-500 transition hover:text-red-400"
+                                                    title="Remove coupon"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
+
                                     <div className="flex justify-between">
                                         <span>Shipping</span>
                                         <span className="font-medium text-white">

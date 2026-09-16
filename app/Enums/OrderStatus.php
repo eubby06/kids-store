@@ -3,10 +3,11 @@
 namespace App\Enums;
 
 enum OrderStatus: string {
-    case PENDING = 'pending';
-    case PROCESSING = 'processing';
-    case SHIPPED = 'shipped';
-    case DELIVERED = 'delivered';
-    case CANCELLED = 'cancelled';
-    case REFUNDED = 'refunded';
+    case PENDING = 'Pending';
+    case PROCESSING = 'Processing';
+    case SHIPPED = 'Shipped';
+    case DELIVERED = 'Delivered';
+    case CANCELLED = 'Cancelled';
+    case REFUNDED = 'Refunded';
+    case PAID = 'Paid';
 }

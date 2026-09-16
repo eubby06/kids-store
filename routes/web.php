@@ -15,20 +15,22 @@ use App\Http\Controllers\ProductSearchController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CouponsController;
-
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StripeWebhookController;
 
 // customer facing
 Route::inertia('/login', 'Frontend/Auth/Login')->name('login');
 Route::inertia('/register', 'Frontend/Auth/Register')->name('register');
-Route::inertia('/cart', 'Frontend/Pages/Cart')->name('cart');
 Route::inertia('/privacy-policy', 'Frontend/Pages/PrivacyPolicy')->name('privacy.policy');
 Route::inertia('/refund-policy', 'Frontend/Pages/RefundPolicy')->name('reund.policy');
 Route::inertia('/terms-of-service', 'Frontend/Pages/TermsOfService')->name('terms.of.service');
 
 Route::get('/', [StoreFrontController::class, 'index'])->name('home');
 Route::get('/contact-us', [MessagesController::class, 'index'])->name('contact.index');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/contact-us', [MessagesController::class, 'submit'])->name('contact.submit');
-Route::post('/cart/coupon', [CouponsController::class, 'apply'])->name('coupon.apply');
+Route::post('/cart/coupon', [CartController::class, 'applyCoupon'])->name('coupon.applyCoupon');
+Route::delete('/cart/coupon', [CartController::class, 'removeCoupon'])->name('cart.removeCoupon');
 Route::post('/cart/items', [CartController::class, 'items'])->name('cart.items');
 Route::delete('/cart/items', [CartController::class, 'remove'])->name('cart.delete');
 Route::put('/cart/items/update', [CartController::class, 'update'])->name('cart.update');
@@ -40,6 +42,8 @@ Route::get('/checkout/show', [CheckoutController::class, 'show'])->name('checkou
 Route::post('/checkout/initialize', [CheckoutController::class, 'initialize'])->name('checkout.initialize');
 Route::post('/chatbot/query', ChatbotController::class)->name('chatbot.query');
 Route::get('/api/search/autocomplete', ProductSearchController::class)->name('api.search.autocomplete');
+Route::post('/payment-methods/save', [PaymentController::class, 'saveCard']);
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 
 Route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'postLogin'])->name('admin.login');

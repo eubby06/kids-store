@@ -40,4 +40,5 @@ export interface CartContextType {
     clearCart: () => void;
     cartTotal: number;
     cartCount: number;
+    appliedCoupon: string;
 }
